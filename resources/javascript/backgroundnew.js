@@ -3,7 +3,7 @@
 function getListByAjax(userKey){
 	 $.ajax({
 	 	  type: 'POST', 
-          url: "",
+          url: "http://localhost:4000/getlist",
           data: {userKey:userKey},
           success: function(data) {
             console.log(data);
@@ -15,11 +15,11 @@ function getListByAjax(userKey){
           dataType : 'json'
       });
 }
-function setListByAjax(userKey,listdata){
+function setListByAjax(userKey,data){
 	$.ajax({  
-		type: 'POST',  
-		url: "",  
-		data: {userKey:userKey, list:listdata},  
+		type: 'POST',
+		url: "http://localhost:4000/setlist",  
+		data: {userKey:userKey, item:data},  
 		success: function(data) {
             console.log(data);
         },
