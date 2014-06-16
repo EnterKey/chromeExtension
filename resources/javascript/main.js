@@ -68,7 +68,7 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 
 myAppMainService.saveScrapInfo = function() {
 	var url = this.scrapInfo.url;
-	var scrapInfoSaveRequestURL = 'http://localhost:4000/ajax/insert_pageEntry';
+	var scrapInfoSaveRequestURL = 'http://115.71.233.172:4000/ajax/insert_pageEntry';
 	var scrapInfoSaveRequestData = {
 		userKey : null,
 		pageInfo : {
