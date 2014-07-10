@@ -1,9 +1,9 @@
 function onAnchorClick(event) {
-  chrome.tabs.create({
-    selected: true,
-    url: event.srcElement.href
-  });
-  return false;
+	chrome.tabs.create({
+		selected : true,
+		url : event.srcElement.href
+	});
+	return false;
 }
 
 function buildPopupDom() {
@@ -18,18 +18,21 @@ function buildPopupDom() {
 			visitPageInfoList.push(JSON.parse(window.localStorage.getItem(key)));
 		}
 
+		visitPageInfoList.sort(function(a, b) {
+			return b.visitedCnt - a.visitedCnt;
+		});
+
 		var ul = document.createElement('ul');
 		popupDiv.appendChild(ul);
 
-		console.dir(visitPageInfoList);
 		for (var i = 0, ie = visitPageInfoList.length; i < ie; ++i) {
 			var a = document.createElement('a');
 			a.href = visitPageInfoList[i].url;
 			a.appendChild(document.createTextNode('TITLE : ' + visitPageInfoList[i].title + ', URL : ' + visitPageInfoList[i].url + ', VisitCnt : ' + visitPageInfoList[i].visitedCnt));
 			a.addEventListener('click', onAnchorClick);
+
 			var li = document.createElement('li');
 			li.appendChild(a);
-
 			ul.appendChild(li);
 		}
 	}
