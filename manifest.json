@@ -7,7 +7,7 @@
     "default_icon": "./resources/img/clock.png"
   },
   "permissions": [
-    "tabs"
+    "tabs", "<all_urls>"
   ],
   "background": {
     "scripts": ["/resources/javascript/background.js"]
