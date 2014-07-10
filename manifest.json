@@ -1,0 +1,13 @@
+{
+  "name": "Visit Site URL History",
+  "version": "1.2",
+  "description": "Reads your history, and shows Visit Site Info.",
+  "browser_action": {
+    "default_popup": "./views/visitedUrls.html",
+    "default_icon": "./resources/img/clock.png"
+  },
+  "permissions": [
+    "tabs"
+  ],
+  "manifest_version": 2
+}
