@@ -1,6 +1,6 @@
 {
   "name": "Visit Site URL History",
-  "version": "1.2",
+  "version": "1.0",
   "description": "Reads your history, and shows Visit Site Info.",
   "browser_action": {
     "default_popup": "./views/visitedUrls.html",
@@ -9,5 +9,8 @@
   "permissions": [
     "tabs"
   ],
+  "background": {
+    "scripts": ["/resources/javascript/background.js"]
+  },
   "manifest_version": 2
 }
