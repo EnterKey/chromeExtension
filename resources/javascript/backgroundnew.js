@@ -1,16 +1,18 @@
 // writen by pcs
 
-function getListByAjax(){
+function getListByAjax(userKey){
 	 $.ajax({
+	 	  type: 'POST', 
           url: "",
-          dataType : 'json',
+          data: {userKey:userKey},
           success: function(data) {
             console.log(data);
           },
           error: function(e) {
           	//error handling
             console.log(e);
-          }
+          },
+          dataType : 'json'
       });
 }
 function setListByAjax(userKey,listdata){
