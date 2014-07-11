@@ -10,7 +10,7 @@
     "tabs", "<all_urls>"
   ],
   "background": {
-    "scripts": ["/resources/javascript/background.js"]
+    "scripts": ["/resources/lib/jquery/jquery-1.9.1.js","/resources/javascript/background.js"]
   },
   "manifest_version": 2
 }
