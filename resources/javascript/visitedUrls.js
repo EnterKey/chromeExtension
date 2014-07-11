@@ -7,11 +7,11 @@ function onAnchorClick(event) {
 }
 
 function buildPopupDom() {
-	var divName = 'visitedUrl_div';
-	var popupDiv = document.getElementById(divName);
-
-	var visitPageInfoList = new Array();
-	var key;
+	var divName = 'visitedUrl_div', 
+		popupDiv = $('#' + divName), 
+		visitPageInfoList = new Array(), 
+		key;
+		
 	if (window.localStorage.length > 0) {
 		for (var i = 0; i < window.localStorage.length; i++) {
 			key = window.localStorage.key(i);
@@ -22,22 +22,20 @@ function buildPopupDom() {
 			return b.visitedCnt - a.visitedCnt;
 		});
 
-		var ul = document.createElement('ul');
-		popupDiv.appendChild(ul);
+		var ul = $('<ul>');
+		popupDiv.append(ul);
 
 		for (var i = 0, ie = visitPageInfoList.length; i < ie; ++i) {
-			var a = document.createElement('a');
-			a.href = visitPageInfoList[i].url;
-			a.appendChild(document.createTextNode('TITLE : ' + visitPageInfoList[i].title + ', URL : ' + visitPageInfoList[i].url + ', VisitCnt : ' + visitPageInfoList[i].visitedCnt));
-			a.addEventListener('click', onAnchorClick);
+			var a = $('<a>').attr('href', visitPageInfoList[i].url).text('TITLE : ' + visitPageInfoList[i].title + ', URL : ' + visitPageInfoList[i].url + ', VisitCnt : ' + visitPageInfoList[i].visitedCnt);
+			a.bind('click', onAnchorClick);
 
-			var li = document.createElement('li');
-			li.appendChild(a);
-			ul.appendChild(li);
+			var li = $('<li>');
+			li.append(a);
+			ul.append(li);
 		}
 	}
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+$(document).bind('DOMContentLoaded', function() {
 	buildPopupDom();
 });
