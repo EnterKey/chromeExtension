@@ -1,7 +1,8 @@
 function onAnchorClick(event) {
+	console.dir(event);
 	chrome.tabs.create({
 		selected : true,
-		url : event.srcElement.href
+		url : event.toElement.href
 	});
 	return false;
 }
