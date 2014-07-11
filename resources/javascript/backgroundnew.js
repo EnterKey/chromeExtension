@@ -13,11 +13,11 @@ function getListByAjax(){
           }
       });
 }
-function setListByAjax(listdata){
+function setListByAjax(userKey,listdata){
 	$.ajax({  
 		type: 'POST',  
 		url: "",  
-		data: {userKey:"", list:listdata},  
+		data: {userKey:userKey, list:listdata},  
 		success: function(data) {
             console.log(data);
         },
