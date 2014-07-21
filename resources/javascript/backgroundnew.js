@@ -4,7 +4,9 @@ function getListByAjax(userKey){
 	 $.ajax({
 	 	  type: 'POST', 
           url: "http://localhost:4000/getlist",
-          data: {userKey:userKey},
+          data: {
+          	userKey:userKey
+          },
           success: function(data) {
             console.log(data);
           },
@@ -19,7 +21,10 @@ function setListByAjax(userKey,data){
 	$.ajax({  
 		type: 'POST',
 		url: "http://localhost:4000/setlist",  
-		data: {userKey:userKey, item:data},  
+		data: {
+			userKey:userKey, 
+			item:data
+		},  
 		success: function(data) {
             console.log(data);
         },
@@ -36,8 +41,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo){
 	if (changeInfo.status === 'complete') {
 		chrome.tabs.get(tabId, function(tab){
 			var url = tab.url, title = tab.title;
-			getListByAjax();
-			var visitedPageInfo =getListByAjax();// JSON.parse(window.localStorage.getItem(url));
+			var visitedPageInfo = getListByAjax('TempUserKey');// JSON.parse(window.localStorage.getItem(url));
 
 			if (visitedPageInfo != null) {
 				visitedPageInfo.visitedCnt += 1;
@@ -49,7 +53,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo){
 				visitedPageInfo.url = url;
 				visitedPageInfo.title = title;
 				visitedPageInfo.date = new Date();
-				setListByAjax(visitedPageInfo);
+				setListByAjax('TempUserKey', visitedPageInfo);
 				//window.localStorage.setItem(visitedPageInfo.url, JSON.stringify(visitedPageInfo));
 			}
 		});
