@@ -20,7 +20,6 @@ myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 			var userContent = document.getElementsByClassName("userContent");
 			userContent = userContent[0].innerText;
 
-			console.log(userContent);
 			this.setScrapInfo(url, title, userContent);
 		} else {
 			var userContentWrapper = myAppMainService.findParentClass(srcElement);
@@ -28,14 +27,11 @@ myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 			if (userContentWrapper != null) {
 				var userContent = userContentWrapper.getElementsByClassName('userContent'), userContentLink = userContentWrapper.getElementsByClassName('_5pcq'), href = userContentLink[0].href, innerText = userContent[0].innerText;
 
-				console.log(href);
-				console.log(innerText);
 				this.setScrapInfo(href, title, innerText);
 			}
 		}
 	} else {
 		// facebook이 아닌 경우
-		console.log(srcElement.innerText);
 		this.setScrapInfo(url, title, srcElement.innerText);
 	}
 };
