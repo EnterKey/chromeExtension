@@ -1,8 +1,3 @@
-if ( typeof (myAppBgService) == typeof (undefined)) {
-	myAppBgService = {};
-}
-
-// myAppBgService.getClickHandler = function (info, tab) {
 function getClickHandler(info, tab) {
     chrome.tabs.query({
         "active": true,
