@@ -1,21 +1,23 @@
+if ( typeof (myAppBgService) == typeof (undefined)) {
+	myAppBgService = {};
+}
 
-// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo){
-// 	if (changeInfo.status === 'complete') {
-// 		chrome.tabs.get(tabId, function(tab){
-// 			var url = tab.url, title = tab.title;
-// 			var visitedPageInfo = JSON.parse(window.localStorage.getItem(url));
+// myAppBgService.getClickHandler = function (info, tab) {
+function getClickHandler(info, tab) {
+    chrome.tabs.query({
+        "active": true,
+        "currentWindow": true
+    }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            "functiontoInvoke": "saveScrapInfo"
+        });
+    });
+};
 
-// 			if (visitedPageInfo != null) {
-// 				visitedPageInfo.visitedCnt += 1;
-// 				window.localStorage.setItem(visitedPageInfo.url, JSON.stringify(visitedPageInfo));
-// 			} else {
-// 				visitedPageInfo = {};
-// 				visitedPageInfo.visitedCnt = 1;
-// 				visitedPageInfo.url = url;
-// 				visitedPageInfo.title = title;
-// 				visitedPageInfo.date = new Date();
-// 				window.localStorage.setItem(visitedPageInfo.url, JSON.stringify(visitedPageInfo));
-// 			}
-// 		});
-// 	}
-// });
+chrome.contextMenus.create({
+	"title" : "My Extension에 저장",
+	"type" : "normal",
+	"contexts" : ["all"],
+	"onclick" : getClickHandler
+}, null);
+

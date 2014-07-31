@@ -1,3 +1,8 @@
 body {
 	min-width: 500px;
 }
+
+.crx_mouse_visited {
+  background-color: #bcd5eb !important;
+  outline: 1px solid #5166bb !important;
+}

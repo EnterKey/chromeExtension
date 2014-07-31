@@ -1,16 +1,19 @@
 {
-  "name": "Visit Site URL History",
-  "version": "1.0",
-  "description": "Reads your history, and shows Visit Site Info.",
-  "browser_action": {
-    "default_popup": "./views/visitedUrls.html",
-    "default_icon": "./resources/img/clock.png"
-  },
-  "permissions": [
-    "tabs", "<all_urls>"
-  ],
-  "background": {
-    "scripts": ["/resources/lib/jquery/jquery-1.9.1.js","/resources/javascript/background.js"]
-  },
-  "manifest_version": 2
+	"name": "My Extension",
+	"description": "Enterkey Test Extension",
+	"version": "1.0",
+	"permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*", "<all_urls>"],
+	"background": {
+		"scripts": ["/resources/javascript/background.js"]
+	},
+	"content_scripts": [
+		{
+			"matches": ["http://*/*", "https://*/*"],
+			"css": ["/resources/stylesheets/common.css"],
+			"js": ["/resources/javascript/main.js", "/resources/lib/jquery/jquery-1.9.1.js"],
+			"run_at": "document_end",
+			"all_frames": true
+		}
+	],
+	"manifest_version": 2
 }
