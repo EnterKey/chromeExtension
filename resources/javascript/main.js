@@ -58,25 +58,12 @@ myAppMainService.setScrapInfo = function(url, title, content) {
 	this.scrapInfo.content	 = content;
 };
 
-myAppMainService.highlightSelectedDiv = function(srcElement) {
-	if (srcElement.nodeName == 'DIV') {
-		if (myAppMainService.prevDOM != null) {
-			myAppMainService.prevDOM.classList.remove(myAppMainService.MOUSE_VISITED_CLASSNAME);
-		}
-
-		srcElement.classList.add(myAppMainService.MOUSE_VISITED_CLASSNAME);
-		myAppMainService.prevDOM = srcElement;
-	}
-};
-
-
 document.addEventListener('mousemove', function(e) {
 	var srcElement 	= e.srcElement, 
 		url 		= document.URL,
 		title		= document.title;
 		
 	myAppMainService.getScrapedTargetInfo(url, title, srcElement);
-	myAppMainService.highlightSelectedDiv(srcElement);
 }, false);
  
 chrome.extension.onMessage.addListener(function(message, sender, callback) {
@@ -89,22 +76,6 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 });
 
 myAppMainService.saveScrapInfo = function() {
-	
-	// var	url 			= this.scrapInfo.url, 
-		// scrapInfo = JSON.parse(window.localStorage.getItem(url));
-// 		
-	// if (scrapInfo == null) {
-	    // scrapInfo 			= {};
-	    // scrapInfo.url 			= url;
-	    // scrapInfo.title 		= this.scrapInfo.title,
-	    // scrapInfo.content 		= this.scrapInfo.content,
-// 		
-		// window.localStorage.setItem(scrapInfo.url, JSON.stringify(scrapInfo));
-		// var result = JSON.parse(window.localStorage.getItem(scrapInfo.url));
-		// console.log("saveScrapInfo");
-		// console.dir(result);
-	// }	
-	
 	var	url 					 = this.scrapInfo.url; 
 	var scrapInfoSaveRequestURL  = 'http://localhost:4000/ajax/insert_pageEntry'; 
 	var scrapInfoSaveRequestData = {
