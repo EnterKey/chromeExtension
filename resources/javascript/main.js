@@ -7,9 +7,9 @@ myAppMainService = {
 	prevDOM : null,
 	userKey : 'TempUserKey',
 	scrapInfo : {
-		url 	: null,
-		title 	: null,
-		content : null 
+		url : null,
+		title : null,
+		content : null
 	}
 };
 
@@ -26,10 +26,7 @@ myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 			var userContentWrapper = myAppMainService.findParentClass(srcElement);
 
 			if (userContentWrapper != null) {
-				var userContent 		= userContentWrapper.getElementsByClassName('userContent'), 
-					userContentLink 	= userContentWrapper.getElementsByClassName('_5pcq'), 
-					href 				= userContentLink[0].href, 
-					innerText  			= userContent[0].innerText;
+				var userContent = userContentWrapper.getElementsByClassName('userContent'), userContentLink = userContentWrapper.getElementsByClassName('_5pcq'), href = userContentLink[0].href, innerText = userContent[0].innerText;
 
 				console.log(href);
 				console.log(innerText);
@@ -53,31 +50,29 @@ myAppMainService.findParentClass = function(el) {
 };
 
 myAppMainService.setScrapInfo = function(url, title, content) {
-	this.scrapInfo.url 		= url;
-	this.scrapInfo.title 	= title;
-	this.scrapInfo.content	 = content;
+	this.scrapInfo.url = url;
+	this.scrapInfo.title = title;
+	this.scrapInfo.content = content;
 };
 
 document.addEventListener('mousemove', function(e) {
-	var srcElement 	= e.srcElement, 
-		url 		= document.URL,
-		title		= document.title;
-		
+	var srcElement = e.srcElement, url = document.URL, title = document.title;
+
 	myAppMainService.getScrapedTargetInfo(url, title, srcElement);
 }, false);
- 
+
 chrome.extension.onMessage.addListener(function(message, sender, callback) {
 	if (message.functiontoInvoke == "saveScrapInfo") {
 		myAppMainService.saveScrapInfo();
-		
+
 	} else if (message.functiontoInvoke == "loadScrapInfo") {
 		myAppMainService.loadScrapInfo();
 	}
 });
 
 myAppMainService.saveScrapInfo = function() {
-	var	url 					 = this.scrapInfo.url; 
-	var scrapInfoSaveRequestURL  = 'http://localhost:4000/ajax/insert_pageEntry'; 
+	var url = this.scrapInfo.url;
+	var scrapInfoSaveRequestURL = 'http://localhost:4000/ajax/insert_pageEntry';
 	var scrapInfoSaveRequestData = {
 		userKey : null,
 		pageInfo : {
@@ -86,16 +81,16 @@ myAppMainService.saveScrapInfo = function() {
 			content : null
 		}
 	};
-	
-	if(url != null) {
-		scrapInfoSaveRequestData.userKey 			= myAppMainService.userKey;
-		scrapInfoSaveRequestData.pageInfo.title 	= myAppMainService.scrapInfo.title;
-		scrapInfoSaveRequestData.pageInfo.url 		= myAppMainService.scrapInfo.url;
-		scrapInfoSaveRequestData.pageInfo.content 	= myAppMainService.scrapInfo.content;
-		
-		$.post(scrapInfoSaveRequestURL, scrapInfoSaveRequestData, function(result){
+
+	if (url != null) {
+		scrapInfoSaveRequestData.userKey = myAppMainService.userKey;
+		scrapInfoSaveRequestData.pageInfo.title = myAppMainService.scrapInfo.title;
+		scrapInfoSaveRequestData.pageInfo.url = myAppMainService.scrapInfo.url;
+		scrapInfoSaveRequestData.pageInfo.content = myAppMainService.scrapInfo.content;
+
+		$.post(scrapInfoSaveRequestURL, scrapInfoSaveRequestData, function(result) {
 			if (result.status) {
-				console.log('save success');		
+				console.log('save success');
 			} else {
 				console.log('save error');
 			}
@@ -105,4 +100,4 @@ myAppMainService.saveScrapInfo = function() {
 
 myAppMainService.loadScrapInfo = function() {
 	console.log("loadScrapInfo");
-};
+}; 
