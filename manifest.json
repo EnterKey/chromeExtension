@@ -10,7 +10,7 @@
 		{
 			"matches": ["http://*/*", "https://*/*"],
 			"css": ["/resources/stylesheets/common.css"],
-			"js": ["/resources/javascript/main.js", "/resources/lib/jquery/jquery-1.9.1.js"],
+			"js": ["/resources/javascript/authentication.js", "/resources/javascript/main.js", "/resources/lib/jquery/jquery-1.9.1.js"],
 			"run_at": "document_end",
 			"all_frames": true
 		}
