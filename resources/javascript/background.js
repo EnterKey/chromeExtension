@@ -13,7 +13,7 @@ chrome.contextMenus.create({
     "title" : "My Extension에 저장",
     "type" : "normal",
     "contexts" : ["all"],
-    "onclick" : ooauth
+    "onclick" : doOAuth
 }, null);
 
 function oauth_callback(res, xhr) {
@@ -34,7 +34,7 @@ function onAuthorized() {
     oauth.sendSignedRequest(url, oauth_callback, request);
 };
 
-function ooauth() {
+function doOAuth() {
     oauth.authorize(onAuthorized);
 }
 
