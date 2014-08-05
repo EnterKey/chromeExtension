@@ -1,4 +1,3 @@
-
 if ( typeof (myAppMainService) == typeof (undefined)) {
 	myAppMainService = {};
 }
@@ -59,13 +58,12 @@ document.addEventListener('mousemove', function(e) {
 }, false);
 
 chrome.extension.onMessage.addListener(function(message, sender, callback) {
-	auth.firstRequest();
-	// if (message.functiontoInvoke == "saveScrapInfo") {
-	// 	myAppMainService.saveScrapInfo();
+	if (message.functiontoInvoke == "saveScrapInfo") {
+		myAppMainService.saveScrapInfo();
 
-	// } else if (message.functiontoInvoke == "loadScrapInfo") {
-	// 	myAppMainService.loadScrapInfo();
-	// }
+	} else if (message.functiontoInvoke == "loadScrapInfo") {
+		myAppMainService.loadScrapInfo();
+	}
 });
 
 myAppMainService.saveScrapInfo = function() {

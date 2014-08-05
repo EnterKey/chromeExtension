@@ -10,27 +10,33 @@ function getClickHandler(info, tab) {
 };
 
 chrome.contextMenus.create({
-	"title" : "My Extension에 저장",
-	"type" : "normal",
-	"contexts" : ["all"],
-	"onclick" : getClickHandler
+    "title" : "My Extension에 저장",
+    "type" : "normal",
+    "contexts" : ["all"],
+    "onclick" : ooauth
 }, null);
 
-
+function oauth_callback(res, xhr) {
+    console.log('get userInfo data');
+    console.log(res, xhr);
+    getClickHandler();
+}
 
 function onAuthorized() {
-  var url = 'https://docs.google.com/feeds/default/private/full';
-  var request = {
-    'method': 'GET',
-    'parameters': {'alt': 'json'}
-  };
 
-  // Send: GET https://docs.google.com/feeds/default/private/full?alt=json
-  oauth.sendSignedRequest(url, function(){
-    
-  }, request);
+    var url = 'https://www.googleapis.com/oauth2/v2/userinfo';
+    var request = {
+      'parameters' : {
+        'alt' : 'json'
+      }
+    };
+
+    oauth.sendSignedRequest(url, oauth_callback, request);
 };
 
+function ooauth() {
+    oauth.authorize(onAuthorized);
+}
 
 var oauth = ChromeExOAuth.initBackgroundPage({
   'request_url':  "https://www.google.com/accounts/OAuthGetRequestToken",

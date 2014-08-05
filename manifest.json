@@ -4,16 +4,22 @@
 	"version": "1.0",
 	"permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*", "<all_urls>"],
 	"background": {
-		"scripts": ["/resources/javascript/background.js"]
+		"page": "/resources/javascript/background.html"
 	},
 	"content_scripts": [
 		{
 			"matches": ["http://*/*", "https://*/*"],
 			"css": ["/resources/stylesheets/common.css"],
-			"js": ["/resources/javascript/authentication.js", "/resources/javascript/main.js", "/resources/lib/jquery/jquery-1.9.1.js"],
+			"js": ["/resources/javascript/main.js", "/resources/lib/jquery/jquery-1.9.1.js"],
 			"run_at": "document_end",
 			"all_frames": true
 		}
+	],
+	"web_accessible_resources": [
+		"chrome_ex_oauth.html",
+		"chrome_ex_oauthsimple.js",
+		"chrome_ex_oauth.js",
+		"onload.js"		
 	],
 	"manifest_version": 2
 }
