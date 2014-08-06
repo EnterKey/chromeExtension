@@ -20,6 +20,14 @@ myAppMainService = {
 	}
 };
 
+document.addEventListener('mousemove', function(e) {
+	var srcElement = e.srcElement, 
+		url = document.URL, 
+		title = document.title;
+
+	myAppMainService.getScrapedTargetInfo(url, title, srcElement);
+}, false);
+
 myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 	if (this.isFacebook(url)) {
 		// facebook 인 경우, facebook은 userContent
@@ -70,13 +78,9 @@ myAppMainService.setScrapInfo = function(url, title, content) {
 	this.datas.scrapInfo.content = content;
 };
 
-document.addEventListener('mousemove', function(e) {
-	var srcElement = e.srcElement, 
-		url = document.URL, 
-		title = document.title;
-
-	myAppMainService.getScrapedTargetInfo(url, title, srcElement);
-}, false);
+/*
+ * Context Menus 에서 보낸 이벤트에 대한 Listener 부분 
+ */
 
 chrome.extension.onMessage.addListener(function(message, sender, callback) {
 	if (message.functiontoInvoke == "saveScrapInfo") {
