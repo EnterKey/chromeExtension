@@ -59,20 +59,24 @@ document.addEventListener('mousemove', function(e) {
 }, false);
 
 chrome.extension.onMessage.addListener(function(message, sender, callback) {
-	auth.firstRequest();
-	// if (message.functiontoInvoke == "saveScrapInfo") {
-	// 	myAppMainService.saveScrapInfo();
+	if (message.functiontoInvoke == "saveScrapInfo") {
+		myAppMainService.userInfo = message.userInfo;
+		myAppMainService.saveScrapInfo();
 
-	// } else if (message.functiontoInvoke == "loadScrapInfo") {
-	// 	myAppMainService.loadScrapInfo();
-	// }
+	} else if (message.functiontoInvoke == "loadScrapInfo") {
+		myAppMainService.loadScrapInfo();
+	}
 });
 
 myAppMainService.saveScrapInfo = function() {
 	var url = this.scrapInfo.url;
 	var scrapInfoSaveRequestURL = 'http://localhost:4000/ajax/insert_pageEntry';
 	var scrapInfoSaveRequestData = {
-		userKey : null,
+		userInfo : {
+			email: null,
+			name: null,
+			picture: null
+		},
 		pageInfo : {
 			url : null,
 			title : null,
@@ -81,11 +85,11 @@ myAppMainService.saveScrapInfo = function() {
 	};
 
 	if (url != null) {
-		scrapInfoSaveRequestData.userKey = myAppMainService.userKey;
-		scrapInfoSaveRequestData.pageInfo.title = myAppMainService.scrapInfo.title;
-		scrapInfoSaveRequestData.pageInfo.url = myAppMainService.scrapInfo.url;
-		scrapInfoSaveRequestData.pageInfo.content = myAppMainService.scrapInfo.content;
+		scrapInfoSaveRequestData.userInfo = myAppMainService.userInfo;
+		scrapInfoSaveRequestData.pageInfo = myAppMainService.scrapInfo;
 
+		console.log(scrapInfoSaveRequestData);
+		
 		$.post(scrapInfoSaveRequestURL, scrapInfoSaveRequestData, function(result) {
 			if (result.status) {
 				console.log('save success');
