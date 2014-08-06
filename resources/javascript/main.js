@@ -27,7 +27,6 @@ myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 			var userContent = document.getElementsByClassName("userContent");
 			userContent = userContent[0].innerText;
 
-			console.log(userContent);
 			this.setScrapInfo(url, title, userContent);
 		} else {
 			// 현재 저장하려는 자료의 최상위 Element를 얻음
@@ -39,14 +38,11 @@ myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 				href = userContentLink[0].href, 
 				innerText = userContent[0].innerText;
 	
-				console.log(innerText);
 				this.setScrapInfo(href, title, innerText);
 			}
 		}
 	} else {
 		// facebook이 아닌 경우
-		
-		console.log(srcElement.innerText);
 		this.setScrapInfo(url, title, srcElement.innerText);
 	}
 };
