@@ -1,51 +1,65 @@
-function getClickHandler(info, tab) {
+function getClickHandler(userInfo) {
+    console.log(userInfo);
     chrome.tabs.query({
         "active": true,
         "currentWindow": true
     }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {
-            "functiontoInvoke": "saveScrapInfo"
+            "functiontoInvoke": "saveScrapInfo",
+            "userInfo": {
+              "email": userInfo.email,
+              "name": userInfo.name,
+              "picture": userInfo.picture
+            }
         });
     });
 };
 
 chrome.contextMenus.create({
-    "title" : "My Extension에 저장",
-    "type" : "normal",
-    "contexts" : ["all"],
-    "onclick" : doOAuth
+	"title" : "My Extension에 저장",
+	"type" : "normal",
+	"contexts" : ["all"],
+	"onclick" : doOauth
 }, null);
 
-function oauth_callback(res, xhr) {
-    console.log('get userInfo data');
-    console.log(res, xhr);
-    getClickHandler();
+
+function oauth_callback(event) {
+  if (xhr.readyState == 4) {
+    if(xhr.status == 200) {
+      // Great success: parse response with JSON
+      var userInfo = JSON.parse(xhr.responseText);
+      getClickHandler(userInfo);
+    } else {
+      // Request failure: something bad happened
+      console.log('get data failure');
+    }
+  }
 }
 
 function onAuthorized() {
 
-    var url = 'https://www.googleapis.com/oauth2/v2/userinfo';
-    var request = {
-      'parameters' : {
-        'alt' : 'json'
-      }
-    };
+  console.log('auth success');
+    var GET_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
 
-    oauth.sendSignedRequest(url, oauth_callback, request);
+    xhr.onreadystatechange = oauth_callback;
+
+    xhr.open('GET', GET_USERINFO_URL, true);
+
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Authorization', 'OAuth ' + googleAuth.getAccessToken());
+
+    xhr.send();
 };
 
-function doOAuth() {
-    oauth.authorize(onAuthorized);
+function doOauth() {
+    googleAuth.authorize(onAuthorized);
 }
 
-var oauth = ChromeExOAuth.initBackgroundPage({
-  'request_url':  "https://www.google.com/accounts/OAuthGetRequestToken",
-  'authorize_url': "https://www.google.com/accounts/OAuthAuthorizeToken",
-  'access_url': "https://www.google.com/accounts/OAuthGetAccessToken",
-  'consumer_key': "994714572327-7vm56ecmedqdgeelem26ci9vu6ji76hg.apps.googleusercontent.com",
-  'consumer_secret': "30Ujwwh_R5AO2hopwolneBs5",
-  'scope': "https://www.googleapis.com/auth/userinfo.email",
-  'app_name': "Project Default Service Account"
+
+var xhr = new XMLHttpRequest();
+
+var googleAuth = new OAuth2('google', {
+  client_id: "994714572327-7vm56ecmedqdgeelem26ci9vu6ji76hg.apps.googleusercontent.com",
+  client_secret: "30Ujwwh_R5AO2hopwolneBs5",
+  api_scope: "https://www.googleapis.com/auth/userinfo.email"
 });
-
-

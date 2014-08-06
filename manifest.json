@@ -2,11 +2,16 @@
 	"name": "My Extension",
 	"description": "Enterkey Test Extension",
 	"version": "1.0",
-	"permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*", "<all_urls>"],
+	"permissions": ["contextMenus", "tabs", "https://accounts.google.com/o/oauth2/token", "https://www.googleapis.com/", "http://*/*", "https://*/*", "<all_urls>"],
 	"background": {
 		"page": "/resources/javascript/background.html"
 	},
 	"content_scripts": [
+		{
+			"matches": ["http://www.google.com/robots.txt*"],
+			"js": ["/oauth2/oauth2_inject.js"],
+			"run_at": "document_start"
+		},
 		{
 			"matches": ["http://*/*", "https://*/*"],
 			"css": ["/resources/stylesheets/common.css"],
@@ -16,10 +21,7 @@
 		}
 	],
 	"web_accessible_resources": [
-		"chrome_ex_oauth.html",
-		"chrome_ex_oauthsimple.js",
-		"chrome_ex_oauth.js",
-		"onload.js"		
+		"oauth2/oauth2.html"
 	],
 	"manifest_version": 2
 }

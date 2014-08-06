@@ -59,8 +59,8 @@ document.addEventListener('mousemove', function(e) {
 
 chrome.extension.onMessage.addListener(function(message, sender, callback) {
 	if (message.functiontoInvoke == "saveScrapInfo") {
+		myAppMainService.userInfo = message.userInfo;
 		myAppMainService.saveScrapInfo();
-
 	} else if (message.functiontoInvoke == "loadScrapInfo") {
 		myAppMainService.loadScrapInfo();
 	}
@@ -70,7 +70,11 @@ myAppMainService.saveScrapInfo = function() {
 	var url = this.scrapInfo.url;
 	var scrapInfoSaveRequestURL = 'http://115.71.233.172:4000/ajax/insert_pageEntry';
 	var scrapInfoSaveRequestData = {
-		userKey : null,
+		userInfo : {
+			email: null,
+			name: null,
+			picture: null
+		},
 		pageInfo : {
 			url : null,
 			title : null,
@@ -79,10 +83,10 @@ myAppMainService.saveScrapInfo = function() {
 	};
 
 	if (url != null) {
-		scrapInfoSaveRequestData.userKey = myAppMainService.userKey;
-		scrapInfoSaveRequestData.pageInfo.title = myAppMainService.scrapInfo.title;
-		scrapInfoSaveRequestData.pageInfo.url = myAppMainService.scrapInfo.url;
-		scrapInfoSaveRequestData.pageInfo.content = myAppMainService.scrapInfo.content;
+		scrapInfoSaveRequestData.userInfo = myAppMainService.userInfo;
+		scrapInfoSaveRequestData.pageInfo = myAppMainService.scrapInfo;
+
+		console.log(scrapInfoSaveRequestData);
 
 		$.post(scrapInfoSaveRequestURL, scrapInfoSaveRequestData, function(result) {
 			if (result.status) {
@@ -96,4 +100,4 @@ myAppMainService.saveScrapInfo = function() {
 
 myAppMainService.loadScrapInfo = function() {
 	console.log("loadScrapInfo");
-}; 
+};
