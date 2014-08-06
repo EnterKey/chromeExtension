@@ -66,7 +66,8 @@ myAppMainService.isFacebookPersonalPage = function(url) {
 myAppMainService.findParentClass = function(el) {
 	while (el.parentNode) {
 		el = el.parentNode;
-		if (el.className.indexOf('userContentWrapper') != -1)
+		// el.className 가 없는 element는 indexOf Method 사용 시 property 에러를 리턴하기 때문에 조건 추가
+		if (el.className && el.className.indexOf('userContentWrapper') != -1)
 			return el;
 	}
 	return null;
