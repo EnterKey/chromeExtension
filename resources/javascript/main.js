@@ -81,18 +81,65 @@ myAppMainService.saveScrapInfo = function() {
 			content : null
 		}
 	};
+	
+	this.scrapInfoSaveRequestResult = {
+		msg : null
+	};
+	this.scrapInfoSaveRequestResult.success = function() {
+		this.msg = '페이지 정보를 저장했습니다.';
+		this.showMessage(this.msg);
+	};
+	this.scrapInfoSaveRequestResult.fail = function() {
+		this.msg = '페이지 정보 저장에 실패했습니다.';
+		this.showMessage(this.msg);
+	};
+	this.scrapInfoSaveRequestResult.showMessage = function(msg) {
+	    var bubbleDOM = $('<div>');
+		bubbleDOM.addClass('wrapper_body');
+		$('body').append(bubbleDOM);
+		
+		var bubbleDOMXPosition = document.body.clientWidth * 75 / 100; // 사용자가 보고있는 브라우저 창의 가로
+		var bubbleDOMYPosition = document.body.clientHeight * 2 / 100 + $(document).scrollTop(); // 사용자가 보고있는 브라우저 창의 세로
+		
+		var temp = document.body.clientWidth - bubbleDOMXPosition;
+		temp = 300 - temp > 0 ? 330 - temp : 0;
+		bubbleDOMXPosition -= temp;
+		
+		var content = "<div class='cbm_wrap'>"
+						+ "<span class='vert-flag noise '>★★★ </span>"
+		     			+ "<h1>Sample Box</h1>"
+		     			+ "<img src='http://www.wpthemegenerator.com/wp-content/uploads/2012/06/Image.jpg'>"
+		     			+ "<p>" + msg + "</p>"
+		     			+ "<br />"
+		     			+ "<a href='http://www.enterkey.kr/'>EnterKey.kr</a>"
+					+ "</div>";
+						
+		bubbleDOM.append(content);
+	    bubbleDOM.css('top', bubbleDOMYPosition + 'px');
+	    bubbleDOM.css('left', bubbleDOMXPosition + 'px');
+	    bubbleDOM.css('zIndex', 1000);
+	    bubbleDOM.css('visibility', 'visible');
+	    
+	    setTimeout(function() {
+	    	bubbleDOM.fadeOut('slow');
+	    	$('body').remove('.selection_bubble');
+	    }, 3000);
+	};
 
 	if (url != null) {
 		scrapInfoSaveRequestData.userInfo = myAppMainService.userInfo;
 		scrapInfoSaveRequestData.pageInfo = myAppMainService.scrapInfo;
-
+		
+		console.log('result : ');
 		console.log(scrapInfoSaveRequestData);
 
 		$.post(scrapInfoSaveRequestURL, scrapInfoSaveRequestData, function(result) {
 			if (result.status) {
 				console.log('save success');
+				myAppMainService.scrapInfoSaveRequestResult.success();
 			} else {
 				console.log('save error');
+				myAppMainService.scrapInfoSaveRequestResult.fail();
 			}
 		});
 	}

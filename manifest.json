@@ -3,8 +3,12 @@
 	"description": "Enterkey Test Extension",
 	"version": "1.0",
 	"permissions": ["contextMenus", "tabs", "https://accounts.google.com/o/oauth2/token", "https://www.googleapis.com/", "http://*/*", "https://*/*", "<all_urls>"],
+	"browser_action": {
+	  "default_popup": "/views/visitedUrls.html",
+	  "default_icon": "/resources/img/icon16_bw.png"
+	},
 	"background": {
-		"page": "/resources/javascript/background.html"
+		"scripts": ["/oauth2/oauth2.js", "/resources/javascript/background.js"]
 	},
 	"content_scripts": [
 		{
@@ -15,7 +19,7 @@
 		{
 			"matches": ["http://*/*", "https://*/*"],
 			"css": ["/resources/stylesheets/common.css"],
-			"js": ["/resources/javascript/main.js", "/resources/lib/jquery/jquery-1.9.1.js"],
+			"js": ["/resources/lib/jquery/jquery-1.9.1.js", "/resources/javascript/main.js"],
 			"run_at": "document_end",
 			"all_frames": true
 		}

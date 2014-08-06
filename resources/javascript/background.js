@@ -1,5 +1,4 @@
 function getClickHandler(userInfo) {
-    console.log(userInfo);
     chrome.tabs.query({
         "active": true,
         "currentWindow": true
@@ -37,8 +36,6 @@ function oauth_callback(event) {
 }
 
 function onAuthorized() {
-
-  console.log('auth success');
     var GET_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
 
     xhr.onreadystatechange = oauth_callback;
