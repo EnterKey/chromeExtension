@@ -21,24 +21,24 @@ chrome.contextMenus.create({
 	"onclick" : doOauth
 }, null);
 
-
-function oauth_callback(event) {
-  if (xhr.readyState == 4) {
-    if(xhr.status == 200) {
-      // Great success: parse response with JSON
-      var userInfo = JSON.parse(xhr.responseText);
-      getClickHandler(userInfo);
-    } else {
-      // Request failure: something bad happened
-      console.log('get data failure');
-    }
-  }
-}
-
 function onAuthorized() {
     var GET_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
 
-    xhr.onreadystatechange = oauth_callback;
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function(event) {
+      if (xhr.readyState == 4) {
+        if(xhr.status == 200) {
+          // Great success: parse response with JSON
+          var userInfo = JSON.parse(xhr.responseText);
+          getClickHandler(userInfo);
+        } else {
+          // Request failure: something bad happened
+          console.log('get data failure');
+        }
+      }
+    };
 
     xhr.open('GET', GET_USERINFO_URL, true);
 
@@ -52,8 +52,6 @@ function doOauth() {
     googleAuth.authorize(onAuthorized);
 }
 
-
-var xhr = new XMLHttpRequest();
 
 var googleAuth = new OAuth2('google', {
   client_id: "994714572327-7vm56ecmedqdgeelem26ci9vu6ji76hg.apps.googleusercontent.com",
