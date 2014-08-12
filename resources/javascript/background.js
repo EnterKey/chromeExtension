@@ -4,7 +4,7 @@ function getClickHandler(userInfo) {
         "currentWindow": true
     }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {
-            "functiontoInvoke": "saveScrapInfo",
+            "functiontoInvoke": "savePageInfo",
             "userInfo": {
               "email": userInfo.email,
               "name": userInfo.name,
