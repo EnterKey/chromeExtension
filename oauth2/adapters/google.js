@@ -13,7 +13,7 @@ OAuth2.adapter('google', {
   },
 
   redirectURL: function(config) {
-    return 'http://www.google.com/robots.txt';
+    return 'http://localhost:4000/main';
   },
 
   parseAuthorizationCode: function(url) {

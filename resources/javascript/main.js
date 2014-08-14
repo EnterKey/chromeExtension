@@ -4,7 +4,7 @@ if ( typeof (myAppMainService) == typeof (undefined)) {
 
 myAppMainService = {
 	ajaxRequestData : {
-		pageInfoSaveRequestURL : 'http://115.71.233.172:4000/ajax/insert_pageEntry'
+		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
 	},
 	datas : {
 		userInfo : {
@@ -21,8 +21,8 @@ myAppMainService = {
 };
 
 document.addEventListener('mousemove', function(e) {
-	var srcElement = e.srcElement, 
-		url = document.URL, 
+	var srcElement = e.srcElement,
+		url = document.URL,
 		title = document.title;
 
 	myAppMainService.getScrapedTargetInfo(url, title, srcElement);
@@ -41,11 +41,11 @@ myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 			var userContentWrapper = myAppMainService.findParentClass(srcElement);
 
 			if (userContentWrapper != null) {
-				var userContent = userContentWrapper.getElementsByClassName('userContent'), 
-				userContentLink = userContentWrapper.getElementsByClassName('_5pcq'), 
-				href = userContentLink[0].href, 
+				var userContent = userContentWrapper.getElementsByClassName('userContent'),
+				userContentLink = userContentWrapper.getElementsByClassName('_5pcq'),
+				href = userContentLink[0].href,
 				innerText = userContent[0].innerText;
-	
+
 				this.setPageInfo(href, title, innerText);
 			}
 		}
@@ -80,7 +80,7 @@ myAppMainService.setPageInfo = function(url, title, content) {
 };
 
 /*
- * Context Menus 에서 보낸 이벤트에 대한 Listener 부분 
+ * Context Menus 에서 보낸 이벤트에 대한 Listener 부분
  */
 
 chrome.extension.onMessage.addListener(function(message, sender, callback) {
@@ -93,10 +93,10 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 
 myAppMainService.savePageInfo = function(userInfo) {
 	var url = this.datas.pageInfo.url;
-	
+
 	if (url != null) {
 		myAppMainService.datas.userInfo = userInfo;
-		
+
 		$.post(myAppMainService.ajaxRequestData.pageInfoSaveRequestURL, myAppMainService.datas, function(result) {
 			if (result.status) {
 				console.log('save success');
@@ -122,14 +122,14 @@ myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRe
     var bubbleDOM = $('<div>');
 	bubbleDOM.addClass('wrapper_body');
 	$('body').append(bubbleDOM);
-	
+
 	var bubbleDOMXPosition = document.body.clientWidth * 75 / 100; // 사용자가 보고있는 브라우저 창의 가로
 	var bubbleDOMYPosition = document.body.clientHeight * 2 / 100 + $(document).scrollTop(); // 사용자가 보고있는 브라우저 창의 세로
-	
+
 	var temp = document.body.clientWidth - bubbleDOMXPosition;
 	temp = 300 - temp > 0 ? 330 - temp : 0;
 	bubbleDOMXPosition -= temp;
-	
+
 	var content = "<div class='cbm_wrap'>"
 					+ "<span class='vert-flag noise '>★★★ </span>"
 	     			+ "<h1>Sample Box</h1>"
@@ -138,13 +138,13 @@ myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRe
 	     			+ "<br />"
 	     			+ "<a href='http://www.enterkey.kr/'>EnterKey.kr</a>"
 				+ "</div>";
-					
+
 	bubbleDOM.append(content);
     bubbleDOM.css('top', bubbleDOMYPosition + 'px');
     bubbleDOM.css('left', bubbleDOMXPosition + 'px');
     bubbleDOM.css('zIndex', 1000);
     bubbleDOM.css('visibility', 'visible');
-    
+
     setTimeout(function() {
     	bubbleDOM.fadeOut('slow');
     	$('body').remove('.selection_bubble');

@@ -54,7 +54,7 @@ function doOauth() {
 
 
 var googleAuth = new OAuth2('google', {
-  client_id: "994714572327-7vm56ecmedqdgeelem26ci9vu6ji76hg.apps.googleusercontent.com",
-  client_secret: "30Ujwwh_R5AO2hopwolneBs5",
+  client_id: "994714572327-1rt0im4unhkai7brfp5mk904llu1kd3p.apps.googleusercontent.com",
+  client_secret: "uA6A1WKOksw63OgKP-kYY29Q",
   api_scope: "https://www.googleapis.com/auth/userinfo.email"
 });
