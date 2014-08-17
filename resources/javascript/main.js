@@ -20,13 +20,15 @@ myAppMainService = {
 	}
 };
 
-document.addEventListener('mousemove', function(e) {
+document.addEventListener('contextmenu', function(e) { myAppMainService.addScrapedTargetEventListener(e); }, false);
+
+myAppMainService.addScrapedTargetEventListener = function(e) {
 	var srcElement = e.srcElement,
 		url = document.URL,
 		title = document.title;
 
 	myAppMainService.getScrapedTargetInfo(url, title, srcElement);
-}, false);
+};
 
 myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 	if (this.isFacebook(url)) {
@@ -94,17 +96,17 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 myAppMainService.savePageInfo = function(userInfo) {
 	var url = this.datas.pageInfo.url;
 
-	if (url != null) {
+	if (url != null && myAppMainService.datas.pageInfo.content != "") {
 		myAppMainService.datas.userInfo = userInfo;
-
+		
 		$.post(myAppMainService.ajaxRequestData.pageInfoSaveRequestURL, myAppMainService.datas, function(result) {
 			if (result.status) {
 				console.log('save success');
 				myAppMainService.pageInfoSaveRequestResult.success();
-			} else {
-				console.log('save error');
-				myAppMainService.pageInfoSaveRequestResult.fail();
-			}
+            } else {
+                console.log('save error');
+                myAppMainService.pageInfoSaveRequestResult.fail();
+           }
 		});
 	}
 };
