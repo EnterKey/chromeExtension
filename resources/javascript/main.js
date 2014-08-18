@@ -10,17 +10,38 @@ myAppMainService = {
 		userInfo : {
 			email : null,
 			name : null,
-			picture : null
+			picture : null,
 		},
 		pageInfo : {
 			url : null,
 			title : null,
-			content : null
+			content : null,
+			fingerprint : null
 		}
 	}
 };
 
 document.addEventListener('contextmenu', function(e) { myAppMainService.addScrapedTargetEventListener(e); }, false);
+
+myAppMainService.makeFingerprinting = function() {
+	var canvas = document.getElementById('canvas'),
+	context = canvas.getContext('2d'),
+	txt = "SW Maestro 5th This is fingerprinting";
+
+	console.log(canvas);
+
+	context.textBaseline = "top";
+	context.font = "14px 'Arial'";
+	context.textBaseline = "alphabetic";
+	context.fillStyle = "#f60";
+	context.fillRect(125,1,62,20);
+	context.fillSytle = "#069";
+	context.fillText(txt, 2, 15);
+	context.fillStyle = "rgba(102, 204, 0, 0.7)";
+	context.fillText(txt, 4, 17);
+
+	this.datas.pageInfo.fingerprint = canvas.toDataURL("data:image/png;base64","");
+}
 
 myAppMainService.addScrapedTargetEventListener = function(e) {
 	var srcElement = e.srcElement,
@@ -98,6 +119,8 @@ myAppMainService.savePageInfo = function(userInfo) {
 
 	if (url != null && myAppMainService.datas.pageInfo.content != "") {
 		myAppMainService.datas.userInfo = userInfo;
+
+		//myAppMainService.makeFingerprinting();
 		
 		$.post(myAppMainService.ajaxRequestData.pageInfoSaveRequestURL, myAppMainService.datas, function(result) {
 			if (result.status) {
