@@ -4,7 +4,7 @@ if ( typeof (myAppMainService) == typeof (undefined)) {
 
 myAppMainService = {
 	ajaxRequestData : {
-		pageInfoSaveRequestURL : 'http://aedilis5.vps.phps.kr:4000/ajax/insert_pageEntry'
+		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
 	},
 	datas : {
 		userInfo : {
@@ -98,7 +98,7 @@ myAppMainService.savePageInfo = function(userInfo) {
 
 	if (url != null && myAppMainService.datas.pageInfo.content != "") {
 		myAppMainService.datas.userInfo = userInfo;
-		
+
 		$.post(myAppMainService.ajaxRequestData.pageInfoSaveRequestURL, myAppMainService.datas, function(result) {
 			if (result.status) {
 				console.log('save success');
@@ -114,7 +114,7 @@ myAppMainService.savePageInfo = function(userInfo) {
 myAppMainService.pageInfoSaveRequestResult = {};
 myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRequestResultMsg) {
 	if(arguments.length == 0) pageInfoSaveRequestResultMsg = '데이터 저장 성공';
-	
+
     var bubbleDOM = $('<div>');
 	bubbleDOM.addClass('wrapper_body');
 	$('body').append(bubbleDOM);
