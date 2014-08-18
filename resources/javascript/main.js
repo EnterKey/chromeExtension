@@ -100,34 +100,21 @@ myAppMainService.savePageInfo = function(userInfo) {
 		myAppMainService.datas.userInfo = userInfo;
 		
 		$.post(myAppMainService.ajaxRequestData.pageInfoSaveRequestURL, myAppMainService.datas, function(result) {
-			if (result.status == 1) {
+			if (result.status) {
 				console.log('save success');
-				myAppMainService.pageInfoSaveRequestResult.success();
-            } else if(result.status == 0) {
-            	console.log('data duplicate');
-				myAppMainService.pageInfoSaveRequestResult.duplicate();
-            } else if(result.status == -1) {
+				myAppMainService.pageInfoSaveRequestResult.showMessage();
+            } else {
                 console.log('save error');
-                myAppMainService.pageInfoSaveRequestResult.fail();
+                myAppMainService.pageInfoSaveRequestResult.showMessage(result.errorMsg);
            }
 		});
 	}
 };
 
 myAppMainService.pageInfoSaveRequestResult = {};
-myAppMainService.pageInfoSaveRequestResult.success = function() {
-	var pageInfoSaveRequestResultMsg = '페이지 정보를 저장했습니다.';
-	this.showMessage(pageInfoSaveRequestResultMsg);
-};
-myAppMainService.pageInfoSaveRequestResult.duplicate = function() {
-	var pageInfoSaveRequestResultMsg = '페이지 정보 저장에 실패했습니다. 중복된 데이터 입니다.';
-	this.showMessage(pageInfoSaveRequestResultMsg);
-};
-myAppMainService.pageInfoSaveRequestResult.fail = function() {
-	var pageInfoSaveRequestResultMsg = '페이지 정보 저장에 실패했습니다.';
-	this.showMessage(pageInfoSaveRequestResultMsg);
-};
 myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRequestResultMsg) {
+	if(arguments.length == 0) pageInfoSaveRequestResultMsg = '데이터 저장 성공';
+	
     var bubbleDOM = $('<div>');
 	bubbleDOM.addClass('wrapper_body');
 	$('body').append(bubbleDOM);
