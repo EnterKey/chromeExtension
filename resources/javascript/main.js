@@ -4,7 +4,7 @@ if ( typeof (myAppMainService) == typeof (undefined)) {
 
 myAppMainService = {
 	ajaxRequestData : {
-		pageInfoSaveRequestURL : 'http://aedilis5.vps.phps.kr:4000/ajax/insert_pageEntry'
+		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
 	},
 	datas : {
 		userInfo : {
@@ -24,11 +24,10 @@ myAppMainService = {
 document.addEventListener('contextmenu', function(e) { myAppMainService.addScrapedTargetEventListener(e); }, false);
 
 myAppMainService.makeFingerprinting = function() {
-	var canvas = document.getElementById('canvas'),
-	context = canvas.getContext('2d'),
+	var canvas = $('<canvas>');
+	var context = canvas[0].getContext('2d');
+	console.log(context);
 	txt = "SW Maestro 5th This is fingerprinting";
-
-	console.log(canvas);
 
 	context.textBaseline = "top";
 	context.font = "14px 'Arial'";
@@ -40,7 +39,8 @@ myAppMainService.makeFingerprinting = function() {
 	context.fillStyle = "rgba(102, 204, 0, 0.7)";
 	context.fillText(txt, 4, 17);
 
-	this.datas.pageInfo.fingerprint = canvas.toDataURL("data:image/png;base64","");
+	this.datas.pageInfo.fingerprint = canvas[0].toDataURL("data:image/png;base64","");
+	console.log(this.datas);
 }
 
 myAppMainService.addScrapedTargetEventListener = function(e) {
@@ -120,30 +120,24 @@ myAppMainService.savePageInfo = function(userInfo) {
 	if (url != null && myAppMainService.datas.pageInfo.content != "") {
 		myAppMainService.datas.userInfo = userInfo;
 
-		//myAppMainService.makeFingerprinting();
+		myAppMainService.makeFingerprinting();
 		
 		$.post(myAppMainService.ajaxRequestData.pageInfoSaveRequestURL, myAppMainService.datas, function(result) {
 			if (result.status) {
 				console.log('save success');
-				myAppMainService.pageInfoSaveRequestResult.success();
+				myAppMainService.pageInfoSaveRequestResult.showMessage();
             } else {
                 console.log('save error');
-                myAppMainService.pageInfoSaveRequestResult.fail();
+                myAppMainService.pageInfoSaveRequestResult.showMessage(result.errorMsg);
            }
 		});
 	}
 };
 
 myAppMainService.pageInfoSaveRequestResult = {};
-myAppMainService.pageInfoSaveRequestResult.success = function() {
-	var pageInfoSaveRequestResultMsg = '페이지 정보를 저장했습니다.';
-	this.showMessage(pageInfoSaveRequestResultMsg);
-};
-myAppMainService.pageInfoSaveRequestResult.fail = function() {
-	var pageInfoSaveRequestResultMsg = '페이지 정보 저장에 실패했습니다.';
-	this.showMessage(pageInfoSaveRequestResultMsg);
-};
 myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRequestResultMsg) {
+	if(arguments.length == 0) pageInfoSaveRequestResultMsg = '데이터 저장 성공';
+
     var bubbleDOM = $('<div>');
 	bubbleDOM.addClass('wrapper_body');
 	$('body').append(bubbleDOM);

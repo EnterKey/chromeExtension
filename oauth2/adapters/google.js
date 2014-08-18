@@ -13,7 +13,7 @@ OAuth2.adapter('google', {
   },
 
   redirectURL: function(config) {
-    return 'http://aedilis5.vps.phps.kr:4000/main';
+    return 'http://localhost:4000/main';
   },
 
   parseAuthorizationCode: function(url) {
