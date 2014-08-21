@@ -6,9 +6,9 @@ function getClickHandler(userInfo) {
         chrome.tabs.sendMessage(tabs[0].id, {
             "functiontoInvoke": "savePageInfo",
             "userInfo": {
-              "email": userInfo.email,
-              "name": userInfo.name,
-              "picture": userInfo.picture
+              "email": null,
+              "name": null,
+              "picture": null
             }
         });
     });
@@ -22,39 +22,37 @@ chrome.contextMenus.create({
 }, null);
 
 function onAuthorized() {
-    var GET_USERINFO_URL = 'https://www.googleapis.com/oauth2/v2/userinfo';
-
-
-    var xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = function(event) {
-      if (xhr.readyState == 4) {
-        if(xhr.status == 200) {
-          // Great success: parse response with JSON
-          var userInfo = JSON.parse(xhr.responseText);
-          getClickHandler(userInfo);
-        } else {
-          // Request failure: something bad happened
-          console.log('get data failure');
-        }
-      }
-    };
-
-    xhr.open('GET', GET_USERINFO_URL, true);
-
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'OAuth ' + googleAuth.getAccessToken());
-
-    xhr.send();
+  var GET_AUTHORIZED_URL = request_origin+'/';
+  chrome.tabs.create({url:GET_AUTHORIZED_URL});
 };
 
 function doOauth() {
-    googleAuth.authorize(onAuthorized);
-}
+  var POST_CHECKAUTH_URL = request_origin+'/ajax/auth/extension/google';
+  var xhr = new XMLHttpRequest();
+
+  xhr.onreadystatechange = function(event) {
+    if (xhr.readyState == 4) {
+      if(xhr.status == 200) {
+        // Great success: parse response with JSON
+        var response = JSON.parse(xhr.responseText);
+        if(response && response.status){
+          getClickHandler();
+        }else{
+          onAuthorized();
+        }
+      } else {
+        // Request failure: something bad happened
+        console.log('post checksession failure');
+      }
+    }
+  };
+
+  xhr.open('POST', POST_CHECKAUTH_URL, true);
+
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+  xhr.send();
+};
 
 
-var googleAuth = new OAuth2('google', {
-  client_id: "994714572327-1rt0im4unhkai7brfp5mk904llu1kd3p.apps.googleusercontent.com",
-  client_secret: "uA6A1WKOksw63OgKP-kYY29Q",
-  api_scope: "https://www.googleapis.com/auth/userinfo.email"
-});
+var request_origin = "http://localhost:4000";
