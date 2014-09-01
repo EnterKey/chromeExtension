@@ -55,4 +55,4 @@ function doOauth() {
 };
 
 
-var request_origin = "http://localhost:4000";
+var request_origin = "http://115.71.233.172:4000";
