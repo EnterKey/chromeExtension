@@ -4,7 +4,7 @@ if ( typeof (myAppMainService) == typeof (undefined)) {
 
 myAppMainService = {
 	ajaxRequestData : {
-		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
+		pageInfoSaveRequestURL : 'http://115.71.233.172:4000/ajax/insert_pageEntry'
 	},
 	datas : {
 		userInfo : {
