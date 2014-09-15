@@ -4,7 +4,8 @@ if ( typeof (myAppMainService) == typeof (undefined)) {
 
 myAppMainService = {
 	_cachedElement : {
-		MOUSE_VISITED_CLASSNAME : 'crx_mouse_visited',
+//		MOUSE_VISITED_CLASSNAME : 'crx_mouse_visited',
+        MOUSE_VISITED_CLASSNAME : null,
 		prevDOM : null,
 		visitPageType : null
 	},
@@ -26,26 +27,27 @@ myAppMainService = {
 	}
 };
 
-document.addEventListener('contextmenu', function(e) { myAppMainService.addScrapedTargetEventListener(e); }, false);
+myAppMainService.initAddEventListener = function() {
+    document.addEventListener('contextmenu', myAppMainService.addScrapedTargetEventListener, false);
+    document.addEventListener('mousemove', myAppMainService.getMouseTargetElementInfo, false);
+    document.addEventListener('mouseover', myAppMainService.getMouseTargetElementInfo, false);
+    document.addEventListener('mouseout', myAppMainService.getMouseTargetElementInfo, false);
 
-document.addEventListener('mousemove', function(e) {
-	var srcElement = e.srcElement, 
-	url = document.URL
-	myAppMainService.highlightSelectedDiv(srcElement, url);
-}, false);
+    myAppMainService.alertBoxClose();
+}
 
-document.addEventListener('mouseover', function(e) {
-	var srcElement = e.srcElement, 
-	url = document.URL
-	myAppMainService.highlightSelectedDiv(srcElement, url);
-}, false);
+myAppMainService.getMouseTargetElementInfo = function(e) {
+    var srcElement = e.srcElement,
+        url = document.URL
+    myAppMainService.highlightSelectedDiv(srcElement, url);
+}
 
-document.addEventListener('mouseout', function(e) {
-	var srcElement = e.srcElement, 
-	url = document.URL
-	myAppMainService.highlightSelectedDiv(srcElement, url);
-}, false);
-
+myAppMainService.initRemoveEventListener = function() {
+    document.removeEventListener('contextmenu', myAppMainService.addScrapedTargetEventListener, false);
+    document.removeEventListener('mousemove', myAppMainService.getMouseTargetElementInfo, false);
+    document.removeEventListener('mouseover', myAppMainService.getMouseTargetElementInfo, false);
+    document.removeEventListener('mouseout', myAppMainService.getMouseTargetElementInfo, false);
+}
 
 myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 	if (this.isFacebook(url)) {
@@ -247,20 +249,27 @@ myAppMainService.loadPageInfo = function() {
 
 myAppMainService.onOffExtension = function(onOffFlag) {
 	if(onOffFlag) {
+        this._cachedElement.MOUSE_VISITED_CLASSNAME = 'crx_mouse_visited';
+        this.initAddEventListener();
+
 		// insert font-awesome.min.css
 		$('head').append("<link href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' rel='stylesheet'>");
-		
+
 		var wrapper =  $('<div>');
 		wrapper.addClass('noteHub-init-alert-msg');
 		$('body').append(wrapper);
-		
+
         var content =
             "<div class='alert alert-info alert-dismissible' id='ycs-handler' role='alert' style='height:25px;'>"+
-            "  <p class='pull-left' style='margin-top: 1px; text-align: center;'><strong>Note Hub가 실행중 입니다.</strong> 원하는 자료를 스크랩하세요. 종료하려면 아이콘을 다시 클릭하세요.</p>"+
+                "<button type='button' class='close' data-dismiss='alert' id='ycs-handler-close'>"+
+                "<span aria-hidden='true'>&times;</span>"+
+                "<span class='sr-only'>Close</span>"+
+                "</button>"+
+                "<p class='pull-left' style='margin-top: 1px; text-align: center;'><strong>Note Hub가 실행중 입니다.</strong> 원하는 자료를 스크랩하세요. 종료하려면 아이콘을 다시 클릭하세요.</p>"+
             "</div>";
 
 		wrapper.append(content);
-		
+
 		wrapper.css('position', 'fixed');
 		wrapper.css('top', '0');
 		wrapper.css('left', '0');
@@ -269,6 +278,15 @@ myAppMainService.onOffExtension = function(onOffFlag) {
 	    wrapper.css('zIndex', '1000');
 	    wrapper.css('visibility', 'visible');
 	} else {
+        myAppMainService.initRemoveEventListener();
+        $('.' + myAppMainService._cachedElement.MOUSE_VISITED_CLASSNAME).removeClass(myAppMainService._cachedElement.MOUSE_VISITED_CLASSNAME);
+        myAppMainService._cachedElement.MOUSE_VISITED_CLASSNAME = null;
         $('.noteHub-init-alert-msg').remove();
     }
+}
+
+myAppMainService.alertBoxClose = function() {
+    $('body').on('click', '#ycs-handler-close', function() {
+        $('.noteHub-init-alert-msg').remove();
+    });
 }
