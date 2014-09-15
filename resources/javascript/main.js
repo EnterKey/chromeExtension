@@ -3,6 +3,11 @@ if ( typeof (myAppMainService) == typeof (undefined)) {
 }
 
 myAppMainService = {
+	_cachedElement : {
+		MOUSE_VISITED_CLASSNAME : 'crx_mouse_visited',
+		prevDOM : null,
+		visitPageType : null
+	},
 	ajaxRequestData : {
 		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
 	},
@@ -22,6 +27,65 @@ myAppMainService = {
 };
 
 document.addEventListener('contextmenu', function(e) { myAppMainService.addScrapedTargetEventListener(e); }, false);
+
+document.addEventListener('mousemove', function(e) {
+	var srcElement = e.srcElement, 
+	url = document.URL
+	myAppMainService.highlightSelectedDiv(srcElement, url);
+}, false);
+
+document.addEventListener('mouseover', function(e) {
+	var srcElement = e.srcElement, 
+	url = document.URL
+	myAppMainService.highlightSelectedDiv(srcElement, url);
+}, false);
+
+document.addEventListener('mouseout', function(e) {
+	var srcElement = e.srcElement, 
+	url = document.URL
+	myAppMainService.highlightSelectedDiv(srcElement, url);
+}, false);
+
+
+myAppMainService.highlightSelectedDiv = function(srcElement, url) {
+	if (this.isFacebook(url)) {
+		// facebook 인 경우, facebook은 userContent
+		if (this.isFacebookPersonalPage(url)) {
+			var userContentWrapper = myAppMainService.findParentClass(srcElement);
+			
+			if (this._cachedElement.prevDOM != null) {
+				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+			}
+			
+			userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+			this._cachedElement.prevDOM = srcElement;
+		} else {
+			// 현재 저장하려는 자료의 최상위 Element를 얻음
+			var userContentWrapper = myAppMainService.findParentClass(srcElement);
+
+			if (userContentWrapper != null) {
+				var removeElement = document.getElementsByClassName(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+				if(removeElement.length > 0) {
+					removeElement[0].classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+				}
+			
+				userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+				this._cachedElement.prevDOM = srcElement;
+			}
+		}
+	} else {
+		// facebook이 아닌 경우
+		if (srcElement.nodeName == 'DIV') {
+			if (this._cachedElement.prevDOM != null) {
+				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+			}
+		
+			srcElement.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+			this._cachedElement.prevDOM = srcElement;
+		}
+	}
+};
+
 
 myAppMainService.makeFingerprinting = function() {
 	var canvas = $('<canvas>');
@@ -89,7 +153,7 @@ myAppMainService.findParentClass = function(el) {
 	while (el.parentNode) {
 		el = el.parentNode;
 		// el.className 가 없는 element는 indexOf Method 사용 시 property 에러를 리턴하기 때문에 조건 추가
-		if (el.className && el.className.indexOf('userContentWrapper') != -1)
+		if (el.className && el.className.indexOf('mbm') != -1)
 			return el;
 	}
 	return null;
@@ -110,6 +174,10 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 		myAppMainService.savePageInfo(message.userInfo);
 	} else if (message.functiontoInvoke == "loadPageInfo") {
 		myAppMainService.loadPageInfo();
+	}
+	
+	if(message.functiontoInvoke == "onOffExtension") {
+		myAppMainService.onOffExtension(message.onOffFlag);
 	}
 });
 
@@ -175,3 +243,49 @@ myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRe
 myAppMainService.loadPageInfo = function() {
 	console.log("loadPageInfo");
 };
+
+
+myAppMainService.onOffExtension = function(onOffFlag) {
+	if(onOffFlag) {
+		// insert font-awesome.min.css
+		$('head').append("<link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css\" rel=\"stylesheet\">");
+		
+		var wrapper =  $('<div>');
+		wrapper.addClass('noteHub-init-alert-msg');
+		$('body').append(wrapper);
+		
+		var content = [
+			"<div class=\"modal fade\" id=\"handler\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"handler\" aria-hidden=\"true\">",
+			"  <div class=\"modal-dialog modal-sm\">",
+			"    <div class=\"modal-content\">",
+			"      <div class=\"modal-header\">",
+			"        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>",
+			"        <h4 class=\"modal-title\" id=\"handlerLabel\">효과 적용</h4>",
+			"      </div>",
+			"      <div class=\"modal-footer\">",
+			"        <button id=\"locate\" type=\"button\" class=\"btn btn-info\">",
+			"          <i class=\"fa fa-arrows\"></i>&nbsp;이동",
+			"        </button>",
+			"        <button id=\"delete\" type=\"button\" class=\"btn btn-info\">",
+			"          <i class=\"fa fa-trash-o\"></i>&nbsp;삭제",
+			"        </button>",
+			"        <button id=\"cancel\" type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">",
+			"          <i class=\"fa fa-check\"></i>&nbsp;적용",
+			"        </button>",
+			"      </div>",
+			"    </div>",
+			"  </div>",
+			"</div>",
+		].join('\n');
+		
+		wrapper.append(content);
+		
+		wrapper.css('position', 'fixed');
+		wrapper.css('top', '0');
+		wrapper.css('left', '0');
+	    wrapper.css('width', '100%');
+	    wrapper.css('height', '100px');
+	    wrapper.css('zIndex', '10000');
+	    wrapper.css('visibility', 'visible');
+	}
+}

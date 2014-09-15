@@ -56,3 +56,21 @@ function doOauth() {
 
 
 var request_origin = "http://localhost:4000";
+
+chrome.browserAction.onClicked.addListener(onOffExtension);
+
+var isActiveExtension = false;
+
+function onOffExtension() {
+	isActiveExtension = !isActiveExtension;
+	
+	chrome.tabs.query({
+        "active": true,
+        "currentWindow": true
+    }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            "functiontoInvoke": "onOffExtension",
+            "onOffFlag": isActiveExtension
+        });
+    });	
+}
