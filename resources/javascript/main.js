@@ -248,44 +248,27 @@ myAppMainService.loadPageInfo = function() {
 myAppMainService.onOffExtension = function(onOffFlag) {
 	if(onOffFlag) {
 		// insert font-awesome.min.css
-		$('head').append("<link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css\" rel=\"stylesheet\">");
+		$('head').append("<link href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' rel='stylesheet'>");
 		
 		var wrapper =  $('<div>');
 		wrapper.addClass('noteHub-init-alert-msg');
 		$('body').append(wrapper);
 		
-		var content = [
-			"<div class=\"modal fade\" id=\"handler\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"handler\" aria-hidden=\"true\">",
-			"  <div class=\"modal-dialog modal-sm\">",
-			"    <div class=\"modal-content\">",
-			"      <div class=\"modal-header\">",
-			"        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span></button>",
-			"        <h4 class=\"modal-title\" id=\"handlerLabel\">효과 적용</h4>",
-			"      </div>",
-			"      <div class=\"modal-footer\">",
-			"        <button id=\"locate\" type=\"button\" class=\"btn btn-info\">",
-			"          <i class=\"fa fa-arrows\"></i>&nbsp;이동",
-			"        </button>",
-			"        <button id=\"delete\" type=\"button\" class=\"btn btn-info\">",
-			"          <i class=\"fa fa-trash-o\"></i>&nbsp;삭제",
-			"        </button>",
-			"        <button id=\"cancel\" type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\">",
-			"          <i class=\"fa fa-check\"></i>&nbsp;적용",
-			"        </button>",
-			"      </div>",
-			"    </div>",
-			"  </div>",
-			"</div>",
-		].join('\n');
-		
+        var content =
+            "<div class='alert alert-info alert-dismissible' id='ycs-handler' role='alert' style='height:25px;'>"+
+            "  <p class='pull-left' style='margin-top: 1px; text-align: center;'><strong>Note Hub가 실행중 입니다.</strong> 원하는 자료를 스크랩하세요. 종료하려면 아이콘을 다시 클릭하세요.</p>"+
+            "</div>";
+
 		wrapper.append(content);
 		
 		wrapper.css('position', 'fixed');
 		wrapper.css('top', '0');
 		wrapper.css('left', '0');
 	    wrapper.css('width', '100%');
-	    wrapper.css('height', '100px');
-	    wrapper.css('zIndex', '10000');
+	    wrapper.css('height', '0');
+	    wrapper.css('zIndex', '1000');
 	    wrapper.css('visibility', 'visible');
-	}
+	} else {
+        $('.noteHub-init-alert-msg').remove();
+    }
 }
