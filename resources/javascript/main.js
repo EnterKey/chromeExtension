@@ -39,7 +39,7 @@ myAppMainService.makeFingerprinting = function() {
 	context.fillText(txt, 4, 17);
 
 	this.datas.userInfo.fingerprint = canvas[0].toDataURL("data:image/png;base64","");
-}
+};
 
 myAppMainService.addScrapedTargetEventListener = function(e) {
 	var srcElement = e.srcElement,
@@ -49,6 +49,7 @@ myAppMainService.addScrapedTargetEventListener = function(e) {
 	myAppMainService.getScrapedTargetInfo(url, title, srcElement);
 };
 
+// 사용자가 저장하려는 페이지의 종류에 따라 데이터를 저장
 myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
 	if (this.isFacebook(url)) {
 		// facebook 인 경우, facebook은 userContent
@@ -113,6 +114,7 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 	}
 });
 
+// 사용자가 저장하고자 하는 컨텐츠를 서버에 요청 
 myAppMainService.savePageInfo = function(userInfo) {
 	var url = this.datas.pageInfo.url;
 
@@ -134,6 +136,8 @@ myAppMainService.savePageInfo = function(userInfo) {
 };
 
 myAppMainService.pageInfoSaveRequestResult = {};
+
+// 사용자가 chrome extension app을 사용하여 서버에 컨텐츠를 저장 요청 후, 서버 응답 결과를 메시지로 출력
 myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRequestResultMsg) {
 	if(arguments.length == 0) pageInfoSaveRequestResultMsg = '데이터 저장 성공';
 
