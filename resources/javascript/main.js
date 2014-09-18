@@ -4,7 +4,6 @@ if ( typeof (myAppMainService) == typeof (undefined)) {
 
 myAppMainService = {
 	_cachedElement : {
-//		MOUSE_VISITED_CLASSNAME : 'crx_mouse_visited',
         MOUSE_VISITED_CLASSNAME : null,
 		prevDOM : null,
 		visitPageType : null
@@ -77,7 +76,8 @@ myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 		}
 	} else {
 		// facebook이 아닌 경우
-		if (srcElement.nodeName == 'DIV') {
+		if (srcElement.nodeName == 'DIV' || srcElement.nodeName == 'TD' || srcElement.nodeName == 'TR' || srcElement.nodeName == 'P'
+            || srcElement.nodeName == 'LI' || srcElement.nodeName == 'TABLE' || srcElement.nodeName == 'DL') {
 			if (this._cachedElement.prevDOM != null) {
 				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 			}
@@ -233,7 +233,7 @@ myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRe
 	bubbleDOM.append(content);
     bubbleDOM.css('top', bubbleDOMYPosition + 'px');
     bubbleDOM.css('left', bubbleDOMXPosition + 'px');
-    bubbleDOM.css('zIndex', 1000);
+    bubbleDOM.css('zIndex', '100000');
     bubbleDOM.css('visibility', 'visible');
 
     setTimeout(function() {
@@ -275,7 +275,7 @@ myAppMainService.onOffExtension = function(onOffFlag) {
 		wrapper.css('left', '0');
 	    wrapper.css('width', '100%');
 	    wrapper.css('height', '0');
-	    wrapper.css('zIndex', '1000');
+	    wrapper.css('zIndex', '100000');
 	    wrapper.css('visibility', 'visible');
 	} else {
         myAppMainService.initRemoveEventListener();

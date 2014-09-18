@@ -4,7 +4,7 @@ var isActiveExtension = false;
 
 function onOffExtension() {
 	isActiveExtension = !isActiveExtension;
-	
+
 	chrome.tabs.query({
         "active": true,
         "currentWindow": true

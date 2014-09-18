@@ -7,7 +7,7 @@
 	  "default_icon": "/resources/img/icon16_bw.png"
 	},
 	"background": {
-		"scripts": ["/resources/javascript/background.js", "/static/js/vendor/jquery-ui.min.js", "/static/js/vendor/bootstrap.min.js"]
+		"scripts": ["/resources/lib/jquery/jquery-1.9.1.js", "/resources/javascript/background.js", "/static/js/vendor/jquery-ui.min.js", "/static/js/vendor/bootstrap.min.js"]
 	},
 	"content_scripts": [
 		{
