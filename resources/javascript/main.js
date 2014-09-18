@@ -6,7 +6,10 @@ myAppMainService = {
 	_cachedElement : {
         MOUSE_VISITED_CLASSNAME : null,
 		prevDOM : null,
-		visitPageType : null
+		visitPageType : null,
+        listOfElementToBeHighlight : [
+            "DIV", "TR", "TD", "P", "LI", "TABLE", "DL"
+        ]
 	},
 	ajaxRequestData : {
 		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
@@ -76,8 +79,7 @@ myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 		}
 	} else {
 		// facebook이 아닌 경우
-		if (srcElement.nodeName == 'DIV' || srcElement.nodeName == 'TD' || srcElement.nodeName == 'TR' || srcElement.nodeName == 'P'
-            || srcElement.nodeName == 'LI' || srcElement.nodeName == 'TABLE' || srcElement.nodeName == 'DL') {
+		if (this.isHighlightAbleElement(srcElement.nodeName)) {
 			if (this._cachedElement.prevDOM != null) {
 				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 			}
@@ -88,6 +90,19 @@ myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 	}
 };
 
+
+myAppMainService.isHighlightAbleElement = function(element) {
+    var listLength = this._cachedElement.listOfElementToBeHighlight.length,
+        checkResult = false;
+
+    for(var  i = 0 ; i < listLength ; i++) {
+        if(this._cachedElement.listOfElementToBeHighlight[i] == element) {
+            checkResult = true;
+        }
+    }
+
+    return checkResult;
+};
 
 myAppMainService.makeFingerprinting = function() {
 	var canvas = $('<canvas>');
