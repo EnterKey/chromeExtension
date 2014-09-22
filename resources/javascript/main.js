@@ -6,7 +6,8 @@ myAppMainService = {
 	_cachedElement : {
         MOUSE_VISITED_CLASSNAME : null,
 		prevDOM : null,
-		visitPageType : null,
+		isFacebookPage : false,
+        isActiveExtension : false,
         listOfElementToBeHighlight : [
             "DIV", "TABLE", "TR", "TD", "P", "LI" , "DL", "PRE"
         ]
@@ -42,7 +43,7 @@ myAppMainService.initAddEventListener = function() {
 
 myAppMainService.getMouseTargetElementInfo = function(e) {
     var srcElement = e.srcElement,
-        url = document.URL
+        url = document.URL;
     myAppMainService.highlightSelectedDiv(srcElement, url);
 }
 
@@ -199,7 +200,7 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 	}
 	
 	if(message.functiontoInvoke == "onOffExtension") {
-		myAppMainService.onOffExtension(message.onOffFlag);
+		myAppMainService.onOffExtension();
 	}
 });
 
@@ -267,7 +268,11 @@ myAppMainService.loadPageInfo = function() {
 };
 
 
-myAppMainService.onOffExtension = function(onOffFlag) {
+myAppMainService.onOffExtension = function() {
+    var onOffFlag = myAppMainService._cachedElement.isActiveExtension = !myAppMainService._cachedElement.isActiveExtension;
+
+    myAppMainService.checkVisitPageType();
+
 	if(onOffFlag) {
         this._cachedElement.MOUSE_VISITED_CLASSNAME = 'crx_mouse_visited';
         this.initAddEventListener();
@@ -286,25 +291,42 @@ myAppMainService.onOffExtension = function(onOffFlag) {
             listOfElementToBeHighlight += myAppMainService.elementSpanWrapper(this._cachedElement.listOfElementToBeHighlight[i]);
         }
 
-        var content =
-            "<div class='notehub-alert notehub-alert-info notehub-alert-dismissible note-hub' id='ycs-handler' style='text-align: center !important;;'>"+
-                "<div class='note-hub' style='float:right;'>" +
-                    "<button type='button' class='notehub-close' id='ycs-handler-close'>"+
-                        "<span>&times;</span>"+
-                        "<span>Close</span>"+
-                    "</button>" +
-                "</div>" +
-                "<div class='note-hub' id='highlight-element-list'>" +
-                    "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
-                    "<br />" +
-                    "<span>탐색되는 Element 단위 : </span>" + listOfElementToBeHighlight +
-                "</div>" +
-                "<div class='note-hub' style='text-align: center;'>" +
-                    "<input type='text' id='element-add-input' style='width: 150px; height: 20px;' />" +
-                    "&nbsp" +
-                    "<input type='button' value='Element Add' id='element-add-btn' />" +
-                "</div>" +
-            "</div>";
+        var content;
+        if(myAppMainService._cachedElement.isFacebookPage) {
+            content =
+                "<div class='notehub-alert notehub-alert-info notehub-alert-dismissible note-hub' id='ycs-handler' style='text-align: center !important;;'>"+
+                    "<div class='note-hub' style='float:right;'>" +
+                        "<button type='button' class='notehub-close' id='ycs-handler-close'>"+
+                            "<span>&times;</span>"+
+                            "<span>Close</span>"+
+                        "</button>" +
+                    "</div>" +
+                    "<span>" +
+                        "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
+                    "</span>" +
+                "</div>";
+        } else {
+            content =
+                "<div class='notehub-alert notehub-alert-info notehub-alert-dismissible note-hub' id='ycs-handler' style='text-align: center !important;;'>"+
+                    "<div class='note-hub' style='float:right;'>" +
+                        "<button type='button' class='notehub-close' id='ycs-handler-close'>"+
+                            "<span>&times;</span>"+
+                            "<span>Close</span>"+
+                        "</button>" +
+                    "</div>" +
+                    "<span>" +
+                        "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
+                    "</span>" +
+                    "<div class='note-hub' id='highlight-element-list'>" +
+                        "<span>탐색되는 Element 단위 : </span>" + listOfElementToBeHighlight +
+                    "</div>" +
+                    "<div class='note-hub' id='highlight-element-add-btn-wrapper' style='text-align: center;'>" +
+                        "<input type='text' id='element-add-input' style='width: 150px; height: 20px;' />" +
+                        "&nbsp" +
+                        "<input type='button' value='Element Add' id='element-add-btn' />" +
+                    "</div>" +
+                "</div>";
+        }
 
 		wrapper.append(content);
 
@@ -367,3 +389,7 @@ myAppMainService.highlightItemRemove = function(itemList, item) {
     }
 }
 
+myAppMainService.checkVisitPageType = function() {
+    var url = document.URL;
+    myAppMainService._cachedElement.isFacebookPage = url.indexOf("www.facebook.com") >= 0 ? true : false;
+};
