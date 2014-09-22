@@ -128,93 +128,93 @@ body {
 }
 
 #ycs-handler #handler {
-    margin: 30px auto auto 30px;
+    margin: 30px auto auto 30px !important;
     width: 320px !important;
     height: 143px !important;
 
-    background-color: rgb(217, 237, 247);
-    border-color: rgb(188, 232, 241);
-    color: rgb(49, 112, 143);
+    background-color: rgb(217, 237, 247) !important;
+    border-color: rgb(188, 232, 241) !important;
+    color: rgb(49, 112, 143) !important;
 }
 
 #ycs-handler #handler .modal-dialog {
-    margin: 0px 10px 20px;
+    margin: 0px 10px 20px !important;
     width: 300px !important;
     height: 123px !important;
 }
 
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
+.notehub-alert {
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+    border: 1px solid transparent !important;
+    border-radius: 4px !important;
 }
-.alert h4 {
-    margin-top: 0;
-    color: inherit;
+.notehub-alert h4 {
+    margin-top: 0 !important;
+    color: inherit !important;
 }
-.alert .alert-link {
-    font-weight: bold;
+.notehub-alert .notehub-alert-link {
+    font-weight: bold !important;
 }
-.alert > p,
-.alert > ul {
-    margin-bottom: 0;
+.notehub-alert > p,
+.notehub-alert > ul {
+    margin-bottom: 0 !important;
 }
-.alert > p + p {
-    margin-top: 5px;
+.notehub-alert > p + p {
+    margin-top: 5px !important;
 }
-.alert-dismissable,
-.alert-dismissible {
-    padding-right: 35px;
+.notehub-alert-dismissable,
+.notehub-alert-dismissible {
+    padding-right: 35px !important;
 }
-.alert-dismissable .close,
-.alert-dismissible .close {
-    position: relative;
-    top: -2px;
-    right: -21px;
-    color: inherit;
+.notehub-alert-dismissable .notehub-close,
+.notehub-alert-dismissible .notehub-close {
+    position: relative !important;
+    top: -2px !important;
+    right: -21px !important;
+    color: inherit !important;
 }
-.alert-success {
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
-    color: #3c763d;
+.notehub-alert-success {
+    background-color: #dff0d8 !important;
+    border-color: #d6e9c6 !important;
+    color: #3c763d !important;
 }
-.alert-success hr {
-    border-top-color: #c9e2b3;
+.notehub-alert-success hr {
+    border-top-color: #c9e2b3 !important;
 }
-.alert-success .alert-link {
-    color: #2b542c;
+.notehub-alert-success .alert-link {
+    color: #2b542c !important;
 }
-.alert-info {
-    background-color: #d9edf7;
-    border-color: #bce8f1;
-    color: #31708f;
+.notehub-alert-info {
+    background-color: #d9edf7 !important;
+    border-color: #bce8f1 !important;
+    color: #31708f !important;
 }
-.alert-info hr {
-    border-top-color: #a6e1ec;
+.notehub-alert-info hr {
+    border-top-color: #a6e1ec !important;
 }
-.alert-info .alert-link {
-    color: #245269;
+.notehub-alert-info .notehub-alert-link {
+    color: #245269 !important;
 }
-.alert-warning {
-    background-color: #fcf8e3;
-    border-color: #faebcc;
-    color: #8a6d3b;
+.notehub-alert-warning {
+    background-color: #fcf8e3 !important;
+    border-color: #faebcc !important;
+    color: #8a6d3b !important;
 }
-.alert-warning hr {
-    border-top-color: #f7e1b5;
+.notehub-alert-warning hr {
+    border-top-color: #f7e1b5 !important;
 }
-.alert-warning .alert-link {
-    color: #66512c;
+.notehub-alert-warning .notehub-alert-link {
+    color: #66512c !important;
 }
-.alert-danger {
-    background-color: #f2dede;
-    border-color: #ebccd1;
-    color: #a94442;
+.notehub-alert-danger {
+    background-color: #f2dede !important;
+    border-color: #ebccd1 !important;
+    color: #a94442 !important;
 }
-.alert-danger hr {
-    border-top-color: #e4b9c0;
+.notehub-alert-danger hr {
+    border-top-color: #e4b9c0 !important;
 }
-.alert-danger .alert-link {
-    color: #843534;
+.notehub-alert-danger .notehub-alert-link {
+    color: #843534 !important;
 }
