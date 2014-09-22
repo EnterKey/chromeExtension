@@ -218,3 +218,13 @@ body {
 .notehub-alert-danger .notehub-alert-link {
     color: #843534 !important;
 }
+
+.notehub-alert-span-item {
+    margin: 0 5px;
+}
+
+.notehub-alert-span-item:hover{
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration:line-through !important;
+}

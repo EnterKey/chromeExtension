@@ -37,6 +37,7 @@ myAppMainService.initAddEventListener = function() {
 
     myAppMainService.alertBoxClose();
     myAppMainService.addElementToBeHighlight();
+    myAppMainService.removeElementToBeHighlight();
 }
 
 myAppMainService.getMouseTargetElementInfo = function(e) {
@@ -80,7 +81,7 @@ myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 		}
 	} else {
 		// facebook이 아닌 경우
-		if (this.isHighlightAbleElement(srcElement.nodeName)) {
+		if (this.isHighlightAbleElement(srcElement)) {
 			if (this._cachedElement.prevDOM != null) {
 				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 			}
@@ -94,10 +95,13 @@ myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 
 myAppMainService.isHighlightAbleElement = function(element) {
     var listLength = this._cachedElement.listOfElementToBeHighlight.length,
-        checkResult = false;
+        checkResult = false,
+        nodeName = element.nodeName,
+        className = element.className || null;
+
 
     for(var  i = 0 ; i < listLength ; i++) {
-        if(this._cachedElement.listOfElementToBeHighlight[i] == element) {
+        if(this._cachedElement.listOfElementToBeHighlight[i] == nodeName && className != 'note-hub') {
             checkResult = true;
         }
     }
@@ -279,23 +283,23 @@ myAppMainService.onOffExtension = function(onOffFlag) {
             listOfElementToBeHighlight = "";
 
         for(var i = 0 ; i < listItemCntOfElementToBeHighlight ; i++ ) {
-            listOfElementToBeHighlight += i == 0 ? this._cachedElement.listOfElementToBeHighlight[i] : ", " + this._cachedElement.listOfElementToBeHighlight[i];
+            listOfElementToBeHighlight += myAppMainService.elementSpanWrapper(this._cachedElement.listOfElementToBeHighlight[i]);
         }
 
         var content =
-            "<div class='notehub-alert notehub-alert-info notehub-alert-dismissible' id='ycs-handler' style='text-align: center !important;;'>"+
-                "<div style='float:right;'>" +
+            "<div class='notehub-alert notehub-alert-info notehub-alert-dismissible note-hub' id='ycs-handler' style='text-align: center !important;;'>"+
+                "<div class='note-hub' style='float:right;'>" +
                     "<button type='button' class='notehub-close' id='ycs-handler-close'>"+
                         "<span>&times;</span>"+
                         "<span>Close</span>"+
                     "</button>" +
                 "</div>" +
-                "<div>" +
+                "<div class='note-hub' id='highlight-element-list'>" +
                     "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
                     "<br />" +
-                    "<span class='highlight-element-list'>탐색되는 Element 단위 : " + listOfElementToBeHighlight + "</span>" +
+                    "<span>탐색되는 Element 단위 : </span>" + listOfElementToBeHighlight +
                 "</div>" +
-                "<div style='text-align: center;'>" +
+                "<div class='note-hub' style='text-align: center;'>" +
                     "<input type='text' id='element-add-input' style='width: 150px; height: 20px;' />" +
                     "&nbsp" +
                     "<input type='button' value='Element Add' id='element-add-btn' />" +
@@ -328,10 +332,38 @@ myAppMainService.alertBoxClose = function() {
 myAppMainService.addElementToBeHighlight = function() {
     $('body').on('click', '#element-add-btn', function() {
         var addElementName = $('#element-add-input').val();
-        addElementName = addElementName.toUpperCase()
-        myAppMainService._cachedElement.listOfElementToBeHighlight.push(addElementName);
+        addElementName = addElementName.toUpperCase();
         $('#element-add-input').val('');
 
-        $('.highlight-element-list').append(', ' + addElementName);
+        for(var i = 0 ; i < myAppMainService._cachedElement.listOfElementToBeHighlight.length ; i++) {
+            if(myAppMainService._cachedElement.listOfElementToBeHighlight[i] == addElementName) {
+                alert('이미 등록된 태그');
+                return;
+            }
+        }
+
+        myAppMainService._cachedElement.listOfElementToBeHighlight.push(addElementName);
+        $('#highlight-element-list').append(myAppMainService.elementSpanWrapper(addElementName));
     });
 };
+
+myAppMainService.removeElementToBeHighlight = function() {
+    $('body').on('click', '.notehub-alert-span-item', function() {
+        myAppMainService.highlightItemRemove(myAppMainService._cachedElement.listOfElementToBeHighlight, this.dataset.highlight);
+        console.dir($('[data-highlight=' + this.dataset.highlight + ']'));
+        $('[data-highlight=' + this.dataset.highlight + ']').remove();
+    });
+};
+
+myAppMainService.elementSpanWrapper = function(element) {
+    element = "<span class='notehub-alert-span-item' data-highlight='" + element + "'>" + element + "</span>";
+    return element;
+}
+
+myAppMainService.highlightItemRemove = function(itemList, item) {
+    var index = itemList.indexOf(item);
+    if(index != -1) {
+        itemList.splice(index, 1);
+    }
+}
+
