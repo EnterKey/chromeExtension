@@ -33,7 +33,7 @@ function getClickHandler(userInfo) {
 };
 
 chrome.contextMenus.create({
-	"title" : "My Extension에 저장",
+	"title" : "Note Hub에 저장",
 	"type" : "normal",
 	"contexts" : ["all"],
 	"onclick" : doOauth

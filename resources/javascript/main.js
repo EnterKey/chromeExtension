@@ -8,7 +8,7 @@ myAppMainService = {
 		prevDOM : null,
 		visitPageType : null,
         listOfElementToBeHighlight : [
-            "DIV", "TR", "TD", "P", "LI", "TABLE", "DL"
+            "DIV", "TABLE", "TR", "TD", "P", "LI" , "DL", "PRE"
         ]
 	},
 	ajaxRequestData : {
@@ -274,13 +274,26 @@ myAppMainService.onOffExtension = function(onOffFlag) {
 		wrapper.addClass('noteHub-init-alert-msg');
 		$('body').append(wrapper);
 
+        var listItemCntOfElementToBeHighlight = this._cachedElement.listOfElementToBeHighlight.length,
+            listOfElementToBeHighlight = "";
+
+        for(var i = 0 ; i < listItemCntOfElementToBeHighlight ; i++ ) {
+            listOfElementToBeHighlight += i == 0 ? this._cachedElement.listOfElementToBeHighlight[i] : ", " + this._cachedElement.listOfElementToBeHighlight[i];
+        }
+
         var content =
-            "<div class='alert alert-info alert-dismissible' id='ycs-handler' role='alert' style='height:25px;'>"+
-                "<button type='button' class='close' data-dismiss='alert' id='ycs-handler-close'>"+
-                "<span aria-hidden='true'>&times;</span>"+
-                "<span class='sr-only'>Close</span>"+
-                "</button>"+
-                "<p class='pull-left' style='margin-top: 1px; text-align: center;'><strong>Note Hub가 실행중 입니다.</strong> 원하는 자료를 스크랩하세요. 종료하려면 아이콘을 다시 클릭하세요.</p>"+
+            "<div class='alert alert-info alert-dismissible' id='ycs-handler' role='alert' style='height:30px;'>"+
+                "<div style='float:right;'>" +
+                    "<button type='button' class='close' data-dismiss='alert' id='ycs-handler-close'>"+
+                        "<span aria-hidden='true'>&times;</span>"+
+                        "<span class='sr-only'>Close</span>"+
+                    "</button>" +
+                "</div>" +
+                "<div>" +
+                    "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
+                    "<br />" +
+                    "<span>탐색되는 Element 단위 : " + listOfElementToBeHighlight + "</span>" +
+                "</div>" +
             "</div>";
 
 		wrapper.append(content);

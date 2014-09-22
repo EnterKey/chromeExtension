@@ -1,6 +1,6 @@
 {
-	"name": "My Extension",
-	"description": "Enterkey Test Extension",
+	"name": "Note Hub",
+	"description": "SW Maestro 5th NoteHub Crawler",
 	"version": "1.0",
 	"permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*", "<all_urls>"],
 	"browser_action": {
@@ -17,5 +17,8 @@
 			"run_at": "document_end"
 		}
 	],
+    "icons": {
+        "16": "/resources/img/icon16_bw.png"
+    },
 	"manifest_version": 2
 }
