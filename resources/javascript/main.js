@@ -274,7 +274,7 @@ myAppMainService.onOffExtension = function() {
     myAppMainService.checkVisitPageType();
 
 	if(onOffFlag) {
-        this._cachedElement.MOUSE_VISITED_CLASSNAME = 'crx_mouse_visited';
+        this._cachedElement.MOUSE_VISITED_CLASSNAME = 'bookmark-target';
         this.initAddEventListener();
 
 		// insert font-awesome.min.css
