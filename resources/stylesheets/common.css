@@ -2,9 +2,9 @@ body {
 	min-width: 500px;
 }
 
-.crx_mouse_visited {
+.bookmark-target {
 	background-color: #bcd5eb !important;
-	outline: 1px solid #5166bb !important;
+	outline: 3px solid #5166bb !important;
 }
 
 .selection_bubble {
@@ -125,4 +125,106 @@ body {
 .cbm_wrap a:hover {
 	text-decoration: underline;
 	color: #6B6B6B !important;
+}
+
+#ycs-handler #handler {
+    margin: 30px auto auto 30px !important;
+    width: 320px !important;
+    height: 143px !important;
+
+    background-color: rgb(217, 237, 247) !important;
+    border-color: rgb(188, 232, 241) !important;
+    color: rgb(49, 112, 143) !important;
+}
+
+#ycs-handler #handler .modal-dialog {
+    margin: 0px 10px 20px !important;
+    width: 300px !important;
+    height: 123px !important;
+}
+
+.notehub-alert {
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+    border: 1px solid transparent !important;
+    border-radius: 4px !important;
+}
+.notehub-alert h4 {
+    margin-top: 0 !important;
+    color: inherit !important;
+}
+.notehub-alert .notehub-alert-link {
+    font-weight: bold !important;
+}
+.notehub-alert > p,
+.notehub-alert > ul {
+    margin-bottom: 0 !important;
+}
+.notehub-alert > p + p {
+    margin-top: 5px !important;
+}
+.notehub-alert-dismissable,
+.notehub-alert-dismissible {
+    padding-right: 35px !important;
+}
+.notehub-alert-dismissable .notehub-close,
+.notehub-alert-dismissible .notehub-close {
+    position: relative !important;
+    top: -2px !important;
+    right: -21px !important;
+    color: inherit !important;
+}
+.notehub-alert-success {
+    background-color: #dff0d8 !important;
+    border-color: #d6e9c6 !important;
+    color: #3c763d !important;
+}
+.notehub-alert-success hr {
+    border-top-color: #c9e2b3 !important;
+}
+.notehub-alert-success .alert-link {
+    color: #2b542c !important;
+}
+.notehub-alert-info {
+    background-color: #d9edf7 !important;
+    border-color: #bce8f1 !important;
+    color: #31708f !important;
+}
+.notehub-alert-info hr {
+    border-top-color: #a6e1ec !important;
+}
+.notehub-alert-info .notehub-alert-link {
+    color: #245269 !important;
+}
+.notehub-alert-warning {
+    background-color: #fcf8e3 !important;
+    border-color: #faebcc !important;
+    color: #8a6d3b !important;
+}
+.notehub-alert-warning hr {
+    border-top-color: #f7e1b5 !important;
+}
+.notehub-alert-warning .notehub-alert-link {
+    color: #66512c !important;
+}
+.notehub-alert-danger {
+    background-color: #f2dede !important;
+    border-color: #ebccd1 !important;
+    color: #a94442 !important;
+}
+.notehub-alert-danger hr {
+    border-top-color: #e4b9c0 !important;
+}
+.notehub-alert-danger .notehub-alert-link {
+    color: #843534 !important;
+}
+
+.notehub-alert-span-item {
+    margin: 0 5px;
+}
+
+.notehub-alert-span-item:hover{
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration:line-through !important;
 }

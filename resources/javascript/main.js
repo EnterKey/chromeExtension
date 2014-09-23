@@ -3,6 +3,15 @@ if ( typeof (myAppMainService) == typeof (undefined)) {
 }
 
 myAppMainService = {
+	_cachedElement : {
+        MOUSE_VISITED_CLASSNAME : null,
+		prevDOM : null,
+		isFacebookPage : false,
+        isActiveExtension : false,
+        listOfElementToBeHighlight : [
+            "DIV", "TABLE", "TR", "TD", "P", "LI" , "DL", "PRE"
+        ]
+	},
 	ajaxRequestData : {
 		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
 	},
@@ -21,7 +30,85 @@ myAppMainService = {
 	}
 };
 
-document.addEventListener('contextmenu', function(e) { myAppMainService.addScrapedTargetEventListener(e); }, false);
+myAppMainService.initAddEventListener = function() {
+    document.addEventListener('contextmenu', myAppMainService.addScrapedTargetEventListener, false);
+    document.addEventListener('mousemove', myAppMainService.getMouseTargetElementInfo, false);
+    document.addEventListener('mouseover', myAppMainService.getMouseTargetElementInfo, false);
+    document.addEventListener('mouseout', myAppMainService.getMouseTargetElementInfo, false);
+
+    myAppMainService.alertBoxClose();
+    myAppMainService.addElementToBeHighlight();
+    myAppMainService.removeElementToBeHighlight();
+}
+
+myAppMainService.getMouseTargetElementInfo = function(e) {
+    var srcElement = e.srcElement,
+        url = document.URL;
+    myAppMainService.highlightSelectedDiv(srcElement, url);
+}
+
+myAppMainService.initRemoveEventListener = function() {
+    document.removeEventListener('contextmenu', myAppMainService.addScrapedTargetEventListener, false);
+    document.removeEventListener('mousemove', myAppMainService.getMouseTargetElementInfo, false);
+    document.removeEventListener('mouseover', myAppMainService.getMouseTargetElementInfo, false);
+    document.removeEventListener('mouseout', myAppMainService.getMouseTargetElementInfo, false);
+}
+
+myAppMainService.highlightSelectedDiv = function(srcElement, url) {
+	if (this.isFacebook(url)) {
+		// facebook 인 경우, facebook은 userContent
+		if (this.isFacebookPersonalPage(url)) {
+			var userContentWrapper = myAppMainService.findParentClass(srcElement);
+			
+			if (this._cachedElement.prevDOM != null) {
+				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+			}
+			
+			userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+			this._cachedElement.prevDOM = srcElement;
+		} else {
+			// 현재 저장하려는 자료의 최상위 Element를 얻음
+			var userContentWrapper = myAppMainService.findParentClass(srcElement);
+
+			if (userContentWrapper != null) {
+				var removeElement = document.getElementsByClassName(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+				if(removeElement.length > 0) {
+					removeElement[0].classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+				}
+			
+				userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+				this._cachedElement.prevDOM = srcElement;
+			}
+		}
+	} else {
+		// facebook이 아닌 경우
+		if (this.isHighlightAbleElement(srcElement)) {
+			if (this._cachedElement.prevDOM != null) {
+				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+			}
+		
+			srcElement.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+			this._cachedElement.prevDOM = srcElement;
+		}
+	}
+};
+
+
+myAppMainService.isHighlightAbleElement = function(element) {
+    var listLength = this._cachedElement.listOfElementToBeHighlight.length,
+        checkResult = false,
+        nodeName = element.nodeName,
+        className = element.className || null;
+
+
+    for(var  i = 0 ; i < listLength ; i++) {
+        if(this._cachedElement.listOfElementToBeHighlight[i] == nodeName && className != 'note-hub') {
+            checkResult = true;
+        }
+    }
+
+    return checkResult;
+};
 
 myAppMainService.makeFingerprinting = function() {
 	var canvas = $('<canvas>');
@@ -89,7 +176,7 @@ myAppMainService.findParentClass = function(el) {
 	while (el.parentNode) {
 		el = el.parentNode;
 		// el.className 가 없는 element는 indexOf Method 사용 시 property 에러를 리턴하기 때문에 조건 추가
-		if (el.className && el.className.indexOf('userContentWrapper') != -1)
+		if (el.className && el.className.indexOf('mbm') != -1)
 			return el;
 	}
 	return null;
@@ -111,6 +198,10 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 		myAppMainService.savePageInfo(message.userInfo);
 	} else if (message.functiontoInvoke == "loadPageInfo") {
 		myAppMainService.loadPageInfo();
+	}
+	
+	if(message.functiontoInvoke == "onOffExtension") {
+		myAppMainService.onOffExtension();
 	}
 });
 
@@ -164,7 +255,7 @@ myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRe
 	bubbleDOM.append(content);
     bubbleDOM.css('top', bubbleDOMYPosition + 'px');
     bubbleDOM.css('left', bubbleDOMXPosition + 'px');
-    bubbleDOM.css('zIndex', 1000);
+    bubbleDOM.css('zIndex', '100000');
     bubbleDOM.css('visibility', 'visible');
 
     setTimeout(function() {
@@ -175,4 +266,131 @@ myAppMainService.pageInfoSaveRequestResult.showMessage = function(pageInfoSaveRe
 
 myAppMainService.loadPageInfo = function() {
 	console.log("loadPageInfo");
+};
+
+
+myAppMainService.onOffExtension = function() {
+    var onOffFlag = myAppMainService._cachedElement.isActiveExtension = !myAppMainService._cachedElement.isActiveExtension;
+
+    myAppMainService.checkVisitPageType();
+
+	if(onOffFlag) {
+        this._cachedElement.MOUSE_VISITED_CLASSNAME = 'bookmark-target';
+        this.initAddEventListener();
+
+		// insert font-awesome.min.css
+		$('head').append("<link href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css' rel='stylesheet'>");
+
+		var wrapper =  $('<div>');
+		wrapper.addClass('noteHub-init-alert-msg');
+		$('body').append(wrapper);
+
+        var listItemCntOfElementToBeHighlight = this._cachedElement.listOfElementToBeHighlight.length,
+            listOfElementToBeHighlight = "";
+
+        for(var i = 0 ; i < listItemCntOfElementToBeHighlight ; i++ ) {
+            listOfElementToBeHighlight += myAppMainService.elementSpanWrapper(this._cachedElement.listOfElementToBeHighlight[i]);
+        }
+
+        var content;
+        if(myAppMainService._cachedElement.isFacebookPage) {
+            content =
+                "<div class='notehub-alert notehub-alert-info notehub-alert-dismissible note-hub' id='ycs-handler' style='text-align: center !important;;'>"+
+                    "<div class='note-hub' style='float:right;'>" +
+                        "<button type='button' class='notehub-close' id='ycs-handler-close'>"+
+                            "<span>&times;</span>"+
+                            "<span>Close</span>"+
+                        "</button>" +
+                    "</div>" +
+                    "<span>" +
+                        "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
+                    "</span>" +
+                "</div>";
+        } else {
+            content =
+                "<div class='notehub-alert notehub-alert-info notehub-alert-dismissible note-hub' id='ycs-handler' style='text-align: center !important;;'>"+
+                    "<div class='note-hub' style='float:right;'>" +
+                        "<button type='button' class='notehub-close' id='ycs-handler-close'>"+
+                            "<span>&times;</span>"+
+                            "<span>Close</span>"+
+                        "</button>" +
+                    "</div>" +
+                    "<span>" +
+                        "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
+                    "</span>" +
+                    "<div class='note-hub' id='highlight-element-list'>" +
+                        "<span>탐색되는 Element 단위 : </span>" + listOfElementToBeHighlight +
+                    "</div>" +
+                    "<div class='note-hub' id='highlight-element-add-btn-wrapper' style='text-align: center;'>" +
+                        "<input type='text' id='element-add-input' style='width: 150px; height: 20px;' />" +
+                        "&nbsp" +
+                        "<input type='button' value='Element Add' id='element-add-btn' />" +
+                    "</div>" +
+                "</div>";
+        }
+
+		wrapper.append(content);
+
+		wrapper.css('position', 'fixed');
+		wrapper.css('top', '0');
+		wrapper.css('left', '0');
+	    wrapper.css('width', '100%');
+	    wrapper.css('height', '0');
+	    wrapper.css('zIndex', '100000');
+	    wrapper.css('visibility', 'visible');
+	} else {
+        myAppMainService.initRemoveEventListener();
+        $('.' + myAppMainService._cachedElement.MOUSE_VISITED_CLASSNAME).removeClass(myAppMainService._cachedElement.MOUSE_VISITED_CLASSNAME);
+        myAppMainService._cachedElement.MOUSE_VISITED_CLASSNAME = null;
+        $('.noteHub-init-alert-msg').remove();
+    }
+}
+
+myAppMainService.alertBoxClose = function() {
+    $('body').on('click', '#ycs-handler-close', function() {
+        $('.noteHub-init-alert-msg').remove();
+    });
+};
+
+myAppMainService.addElementToBeHighlight = function() {
+    $('body').on('click', '#element-add-btn', function() {
+        var addElementName = $('#element-add-input').val();
+        addElementName = addElementName.toUpperCase();
+        $('#element-add-input').val('');
+
+        for(var i = 0 ; i < myAppMainService._cachedElement.listOfElementToBeHighlight.length ; i++) {
+            if(myAppMainService._cachedElement.listOfElementToBeHighlight[i] == addElementName) {
+                alert('이미 등록된 태그');
+                return;
+            }
+        }
+
+        myAppMainService._cachedElement.listOfElementToBeHighlight.push(addElementName);
+        $('#highlight-element-list').append(myAppMainService.elementSpanWrapper(addElementName));
+    });
+};
+
+myAppMainService.removeElementToBeHighlight = function() {
+    $('body').on('click', '.notehub-alert-span-item', function() {
+        myAppMainService.highlightItemRemove(myAppMainService._cachedElement.listOfElementToBeHighlight, this.dataset.highlight);
+        console.dir($('[data-highlight=' + this.dataset.highlight + ']'));
+        $('[data-highlight=' + this.dataset.highlight + ']').remove();
+    });
+};
+
+myAppMainService.elementSpanWrapper = function(element) {
+    element = "<span class='notehub-alert-span-item' data-highlight='" + element + "'>" + element + "</span>";
+    return element;
+}
+
+myAppMainService.highlightItemRemove = function(itemList, item) {
+    var index = itemList.indexOf(item);
+    if(index != -1) {
+        itemList.splice(index, 1);
+    }
+}
+
+myAppMainService.checkVisitPageType = function() {
+    var url = document.URL;
+    myAppMainService._cachedElement.isFacebookPage = url.indexOf("www.facebook.com") >= 0 ? true : false;
 };

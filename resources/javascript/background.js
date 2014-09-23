@@ -1,3 +1,20 @@
+chrome.browserAction.onClicked.addListener(onOffExtension);
+
+var isActiveExtension = false;
+
+function onOffExtension() {
+	isActiveExtension = !isActiveExtension;
+
+	chrome.tabs.query({
+        "active": true,
+        "currentWindow": true
+    }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {
+            "functiontoInvoke": "onOffExtension"
+        });
+    });	
+}
+
 function getClickHandler(userInfo) {
     chrome.tabs.query({
         "active": true,
@@ -15,7 +32,7 @@ function getClickHandler(userInfo) {
 };
 
 chrome.contextMenus.create({
-	"title" : "My Extension에 저장",
+	"title" : "Note Hub에 저장",
 	"type" : "normal",
 	"contexts" : ["all"],
 	"onclick" : doOauth
