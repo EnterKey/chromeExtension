@@ -186,7 +186,7 @@ myAppMainService.setPageInfo = function(url, title, content) {
 	this.datas.pageInfo.url = url;
 	this.datas.pageInfo.title = title;
 	this.datas.pageInfo.content = content;
-	this.datas.pageInfo.htmldata=document.documentElement.innerHTML;
+	this.datas.pageInfo.htmldata=$(".bookmark-target").html();
 };
 
 /*
