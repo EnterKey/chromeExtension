@@ -297,7 +297,7 @@ noteHub = {
                         "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
                     "</span>";
 
-            content += (noteHub._cachedElement.isFacebookPage == true ? msgForFacebookPage : msgForNoneFacebookPage);
+            content += (noteHub._cachedElement.isFacebookPage == true ? msgForFacebookPage : msgForFacebookPage);
 
             wrapper.append(content);
 
@@ -343,7 +343,6 @@ noteHub = {
     removeElementToBeHighlight : function() {
         $('body').on('click', '.notehub-alert-span-item', function() {
             noteHub.highlightItemRemove(noteHub._cachedElement.listOfElementToBeHighlight, this.dataset.highlight);
-            console.dir($('[data-highlight=' + this.dataset.highlight + ']'));
             $('[data-highlight=' + this.dataset.highlight + ']').remove();
         });
     },
