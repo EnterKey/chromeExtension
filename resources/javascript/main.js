@@ -13,7 +13,7 @@ myAppMainService = {
         ]
 	},
 	ajaxRequestData : {
-		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
+		pageInfoSaveRequestURL : 'http://notehub.net/ajax/insert_pageEntry'
 	},
 	datas : {
 		userInfo : {
@@ -59,11 +59,11 @@ myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 		// facebook 인 경우, facebook은 userContent
 		if (this.isFacebookPersonalPage(url)) {
 			var userContentWrapper = myAppMainService.findParentClass(srcElement);
-			
+
 			if (this._cachedElement.prevDOM != null) {
 				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 			}
-			
+
 			userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 			this._cachedElement.prevDOM = srcElement;
 		} else {
@@ -75,7 +75,7 @@ myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 				if(removeElement.length > 0) {
 					removeElement[0].classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 				}
-			
+
 				userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 				this._cachedElement.prevDOM = srcElement;
 			}
@@ -86,7 +86,7 @@ myAppMainService.highlightSelectedDiv = function(srcElement, url) {
 			if (this._cachedElement.prevDOM != null) {
 				this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 			}
-		
+
 			srcElement.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
 			this._cachedElement.prevDOM = srcElement;
 		}
@@ -199,13 +199,13 @@ chrome.extension.onMessage.addListener(function(message, sender, callback) {
 	} else if (message.functiontoInvoke == "loadPageInfo") {
 		myAppMainService.loadPageInfo();
 	}
-	
+
 	if(message.functiontoInvoke == "onOffExtension") {
 		myAppMainService.onOffExtension();
 	}
 });
 
-// 사용자가 저장하고자 하는 컨텐츠를 서버에 요청 
+// 사용자가 저장하고자 하는 컨텐츠를 서버에 요청
 myAppMainService.savePageInfo = function(userInfo) {
 	var url = this.datas.pageInfo.url;
 

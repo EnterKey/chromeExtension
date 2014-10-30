@@ -12,7 +12,7 @@ function onOffExtension() {
         chrome.tabs.sendMessage(tabs[0].id, {
             "functiontoInvoke": "onOffExtension"
         });
-    });	
+    });
 }
 
 function getClickHandler(userInfo) {
@@ -72,4 +72,4 @@ function doOauth() {
 };
 
 
-var request_origin = "http://localhost:4000";
+var request_origin = "http://notehub.net";
