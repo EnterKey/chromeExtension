@@ -1,33 +1,33 @@
 if ( typeof (noteHub) == typeof (undefined)) {
-	noteHub = {};
+    noteHub = {};
 }
 
 noteHub = {
-	_cachedElement : {
+    _cachedElement : {
         MOUSE_VISITED_CLASSNAME : null,
-		prevDOM : null,
-		isFacebookPage : false,
+        prevDOM : null,
+        isFacebookPage : false,
         isActiveExtension : false,
         listOfElementToBeHighlight : [
             "DIV", "TABLE", "TR", "TD", "P", "LI" , "DL", "PRE"
         ]
-	},
-	ajaxRequestData : {
-		pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
-	},
-	datas : {
-		userInfo : {
-			email : null,
-			name : null,
-			picture : null,
-			fingerprint : null
-		},
-		pageInfo : {
-			url : null,
-			title : null,
-			content : null
-		}
-	},
+    },
+    ajaxRequestData : {
+        pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
+    },
+    datas : {
+        userInfo : {
+            email : null,
+            name : null,
+            picture : null,
+            fingerprint : null
+        },
+        pageInfo : {
+            url : null,
+            title : null,
+            content : null
+        }
+    },
 
     initAddEventListener : function() {
         document.addEventListener('contextmenu', noteHub.addScrapedTargetEventListener, false);
@@ -98,64 +98,6 @@ noteHub = {
             nodeName = element.nodeName,
             className = element.className || null;
 
-<<<<<<< HEAD
-	myAppMainService.getScrapedTargetInfo(url, title, srcElement);
-};
-
-// 사용자가 저장하려는 페이지의 종류에 따라 데이터를 저장
-myAppMainService.getScrapedTargetInfo = function(url, title, srcElement) {
-	if (this.isFacebook(url)) {
-		// facebook 인 경우, facebook은 userContent
-		if (this.isFacebookPersonalPage(url)) {
-			var userContent = document.getElementsByClassName("userContent");
-			userContent = userContent[0].innerText;
-
-			this.setPageInfo(url, title, userContent);
-		} else {
-			// 현재 저장하려는 자료의 최상위 Element를 얻음
-			var userContentWrapper = myAppMainService.findParentClass(srcElement);
-
-			if (userContentWrapper != null) {
-				var userContent = userContentWrapper.getElementsByClassName('userContent'),
-				userContentLink = userContentWrapper.getElementsByClassName('_5pcq'),
-				href = userContentLink[0].href,
-				innerText = userContent[0].innerText;
-
-				this.setPageInfo(href, title, innerText);
-			}
-		}
-	} else {
-		// facebook이 아닌 경우
-		this.setPageInfo(url, title, srcElement.innerText);
-	}
-};
-
-myAppMainService.isFacebook = function(url) {
-	return url.indexOf("https://www.facebook.com") >= 0 ? true : false;
-};
-
-myAppMainService.isFacebookPersonalPage = function(url) {
-	return (url.indexOf('/posts/') != -1 || url.indexOf('/permalink/') != -1) ? true : false;
-};
-
-myAppMainService.findParentClass = function(el) {
-	while (el.parentNode) {
-		el = el.parentNode;
-		// el.className 가 없는 element는 indexOf Method 사용 시 property 에러를 리턴하기 때문에 조건 추가
-		if (el.className && el.className.indexOf('mbm') != -1)
-			return el;
-	}
-	return null;
-};
-
-myAppMainService.setPageInfo = function(url, title, content) {
-	this.datas.pageInfo.url = url;
-	this.datas.pageInfo.title = title;
-	this.datas.pageInfo.content = content;
-	this.datas.pageInfo.htmldata=$(".bookmark-target").html();
-};
-=======
->>>>>>> extensionFirstRefactoring
 
         for(var  i = 0 ; i < listLength ; i++) {
             if(this._cachedElement.listOfElementToBeHighlight[i] == nodeName && className != 'note-hub') {
@@ -331,29 +273,29 @@ myAppMainService.setPageInfo = function(url, title, content) {
             }
 
             var msgForNoneFacebookPage =
-                        "<div class='note-hub' id='highlight-element-list'>" +
-                            "<span>탐색되는 Element 단위 : </span>" + listOfElementToBeHighlight +
-                        "</div>" +
-                        "<div class='note-hub' id='highlight-element-add-btn-wrapper' style='text-align: center;'>" +
-                            "<input type='text' id='element-add-input' style='width: 150px; height: 20px;' />" +
-                            "&nbsp" +
-                            "<input type='button' value='Element Add' id='element-add-btn' />" +
-                        "</div>" +
+                    "<div class='note-hub' id='highlight-element-list'>" +
+                    "<span>탐색되는 Element 단위 : </span>" + listOfElementToBeHighlight +
+                    "</div>" +
+                    "<div class='note-hub' id='highlight-element-add-btn-wrapper' style='text-align: center;'>" +
+                    "<input type='text' id='element-add-input' style='width: 150px; height: 20px;' />" +
+                    "&nbsp" +
+                    "<input type='button' value='Element Add' id='element-add-btn' />" +
+                    "</div>" +
                     "</div>",
 
                 msgForFacebookPage = "</div>";
 
             var content =
                 "<div class='notehub-alert notehub-alert-info notehub-alert-dismissible note-hub' id='ycs-handler' style='text-align: center !important;;'>"+
-                    "<div class='note-hub' style='float:right;'>" +
-                        "<button type='button' class='notehub-close' id='ycs-handler-close'>"+
-                            "<span>&times;</span>"+
-                            "<span>Close</span>"+
-                        "</button>" +
-                    "</div>" +
-                    "<span>" +
-                        "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
-                    "</span>";
+                "<div class='note-hub' style='float:right;'>" +
+                "<button type='button' class='notehub-close' id='ycs-handler-close'>"+
+                "<span>&times;</span>"+
+                "<span>Close</span>"+
+                "</button>" +
+                "</div>" +
+                "<span>" +
+                "<strong>Note Hub</strong>가 실행중 입니다. 원하는 자료를 스크랩하세요. 종료하려면 Extension 아이콘을 다시 클릭하세요." +
+                "</span>";
 
             content += (noteHub._cachedElement.isFacebookPage == true ? msgForFacebookPage : msgForFacebookPage);
 
@@ -427,13 +369,13 @@ myAppMainService.setPageInfo = function(url, title, content) {
  * Context Menus 에서 보낸 이벤트에 대한 Listener 부분
  */
 chrome.extension.onMessage.addListener(function(message, sender, callback) {
-	if (message.functiontoInvoke == "savePageInfo") {
-		noteHub.savePageInfo(message.userInfo);
-	} else if (message.functiontoInvoke == "loadPageInfo") {
-		noteHub.loadPageInfo();
-	}
-	
-	if(message.functiontoInvoke == "onOffExtension") {
-		noteHub.onOffExtension();
-	}
+    if (message.functiontoInvoke == "savePageInfo") {
+        noteHub.savePageInfo(message.userInfo);
+    } else if (message.functiontoInvoke == "loadPageInfo") {
+        noteHub.loadPageInfo();
+    }
+
+    if(message.functiontoInvoke == "onOffExtension") {
+        noteHub.onOffExtension();
+    }
 });
