@@ -72,4 +72,4 @@ function doOauth() {
 };
 
 
-var request_origin = "http://localhost:4000";
+var request_origin = "http://notehub.net";

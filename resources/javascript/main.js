@@ -13,7 +13,7 @@ noteHub = {
         ]
     },
     ajaxRequestData : {
-        pageInfoSaveRequestURL : 'http://localhost:4000/ajax/insert_pageEntry'
+        pageInfoSaveRequestURL : 'http://notehub.net/ajax/insert_pageEntry'
     },
     datas : {
         userInfo : {
@@ -54,7 +54,6 @@ noteHub = {
     },
 
     highlightSelectedDiv : function(srcElement, url) {
-        if (this.isFacebook(url)) {
             // facebook 인 경우, facebook은 userContent
             if (this.isFacebookPersonalPage(url)) {
                 var userContentWrapper = noteHub.findParentClass(srcElement);
