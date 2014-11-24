@@ -60,35 +60,37 @@ noteHub = {
 
                 if (this._cachedElement.prevDOM != null) {
                     this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
-                }
-
-                userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
-                this._cachedElement.prevDOM = srcElement;
-            } else {
-                // 현재 저장하려는 자료의 최상위 Element를 얻음
-                var userContentWrapper = noteHub.findParentClass(srcElement);
-
-                if (userContentWrapper != null) {
-                    var removeElement = document.getElementsByClassName(this._cachedElement.MOUSE_VISITED_CLASSNAME);
-                    if(removeElement.length > 0) {
-                        removeElement[0].classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
-                    }
 
                     userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
                     this._cachedElement.prevDOM = srcElement;
                 }
-            }
-        } else {
-            // facebook이 아닌 경우
-            if (this.isHighlightAbleElement(srcElement)) {
-                if (this._cachedElement.prevDOM != null) {
-                    this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
-                }
+                else
+                {
+                    // 현재 저장하려는 자료의 최상위 Element를 얻음
+                    var userContentWrapper = noteHub.findParentClass(srcElement);
 
-                srcElement.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
-                this._cachedElement.prevDOM = srcElement;
+                    if (userContentWrapper != null) {
+                        var removeElement = document.getElementsByClassName(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+                        if (removeElement.length > 0) {
+                            removeElement[0].classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+                        }
+
+                        userContentWrapper.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+                        this._cachedElement.prevDOM = srcElement;
+                    }
+                }
             }
-        }
+            else {
+                // facebook이 아닌 경우
+                if (this.isHighlightAbleElement(srcElement)) {
+                    if (this._cachedElement.prevDOM != null) {
+                        this._cachedElement.prevDOM.classList.remove(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+                    }
+
+                    srcElement.classList.add(this._cachedElement.MOUSE_VISITED_CLASSNAME);
+                    this._cachedElement.prevDOM = srcElement;
+                }
+            }
     },
 
     isHighlightAbleElement : function(element) {
